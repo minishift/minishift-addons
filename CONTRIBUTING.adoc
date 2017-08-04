@@ -1,0 +1,29 @@
+[[contribution-guidelines]]
+= Contribution guidelines
+
+[[filing-issues]]
+== Filing issues
+
+File issues using the standard
+https://github.com/minishift/minishift-addons/issues[Github issue tracker] for the repository.
+Before you submit a new issue, we recommend that you search the list of issues to see if anyone already submitted a similar issue.
+
+[[contributing-patches]]
+== Contributing patches
+
+Thank you for your contributions! Please follow this process to submit a patch:
+
+.  Create an issue describing your proposed change to the repository.
+.  Fork the repository and create a topic branch.
+.  Submit a pull request with the proposed changes.
+
+NOTE: If you submit a new add-on, the add-on must be added as a sub-directory in the *_/add-ons/_* sub-directory of the repository.
+See the documentation for information about link:https://docs.openshift.org/latest/minishift/using/addons.html#add-ons-overview[file structure and content format].
+
+[[questions]]
+== Questions?
+
+If you run into issues or have any questions about contributions, you can reach the Minishift community by:
+
+- Signing up to our https://lists.minishift.io/admin/lists/minishift.lists.minishift.io[mailing list]
+- Joining the #minishift channel on https://freenode.net/[Freenode IRC]

@@ -1,0 +1,72 @@
+[[minishift-addons]]
+= Minishift Add-ons
+:icons:
+:toc: macro
+:toc-title:
+:toclevels: 1
+
+toc::[]
+
+This repository contains add-ons contributed by the Minishift community.
+
+We hope that by sharing these add-ons, folks in the community will be able to make the most out of their Minishift environment.
+Community add-ons are tested and supported by the community.
+
+[[introduction-addons]]
+== Introduction
+
+link:https://docs.openshift.org/latest/minishift/using/addons.html[Minishift add-ons] are extensions, or plug-ins, that customize the default OpenShift cluster configuration and behavior.
+For example, you can use the link:https://github.com/minishift/minishift/tree/master/addons/anyuid[anyuid] add-on to allow authenticated users to run images without a pre-allocated UID, or the link:https://github.com/minishift/minishift/tree/master/addons/registry-route[registry-route] add-on to expose the OpenShift registry as a route.
+
+Minishift includes several link:https://docs.openshift.org/latest/minishift/using/addons.html#default-addons[default add-ons], which are installed automatically when you first start Minishift.
+These add-ons are tested and supported by the Minishift core team.
+You can also write your own link:https://docs.openshift.org/latest/minishift/using/addons.html#custom-addons[custom add-ons] that use any of the link:https://docs.openshift.org/latest/minishift/using/addons.html#addon-commands[supported add-on commands].
+
+[[share-addons-with-community]]
+== Share your add-ons with the community
+
+You are invited to share your add-ons with the Minishift community by submitting them to this repository.
+To submit your add-on, follow the link:CONTRIBUTING.adoc[contribution guidelines] to open a new issue and submit a pull request.
+
+Community add-ons are not officially supported by the Minishift core team, although the core developers do their best to help out when reviewing and merging new add-ons to this repository.
+The community is encouraged to help contributors by testing and improving these add-ons.
+
+[[download-use-community-addons]]
+== Download and use community add-ons
+
+To use any of the add-ons from this repository in your Minishift environment:
+
+. Clone the repository to your local machine.
+
+. Install the add-on that you want to use by running the following command:
++
+----
+$ minishift addons install <path_to_addon>
+----
+
+. Choose whether to apply the add-on to a running Minishift VM or enable the add-on to start each time that Minishift starts.
++
+- To apply the add-on once to a running Minishift VM, run the following command:
++
+----
+$ minishift addons apply <addon-name>
+----
++
+- To enable the add-on to start each time that Minishift starts, run the following command:
++
+----
+$ minishift addons --enable <addon-name>
+----
+
+For more information about enabling, disabling, and applying add-ons, see the link:https://docs.openshift.org/latest/minishift/using/addons.html[Add-ons] topic in the Minishift documentation.
+
+[[contact-community]]
+== Contact the Minishift community
+
+Minishift is an open-source project dedicated to developing and supporting Minishift.
+Contributions, questions, and comments are all welcomed and encouraged!
+
+You can reach the Minishift community by:
+
+- Signing up to our https://lists.minishift.io/admin/lists/minishift.lists.minishift.io[mailing list]
+- Joining the #minishift channel on https://freenode.net/[Freenode IRC]
