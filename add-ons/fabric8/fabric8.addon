@@ -16,7 +16,7 @@ oc adm new-project developer
 oc adm new-project fabric8
 
 echo Installing the Fabric8 System using GitHub Client ID #{GITHUB_OAUTH_CLIENT_SECRET}
-oc new-app --param APISERVER_HOSTPORT="#{ip}:8443" --param GITHUB_OAUTH_CLIENT_SECRET=#{GITHUB_OAUTH_CLIENT_SECRET} --param GITHUB_OAUTH_CLIENT_ID=#{GITHUB_OAUTH_CLIENT_ID} https://raw.githubusercontent.com/fabric8io/fabric8-resources/master/fabric8-system-openshift.yml -n fabric8
+oc new-app --param APISERVER_HOSTPORT="#{ip}:8443" --param GITHUB_OAUTH_CLIENT_SECRET=#{GITHUB_OAUTH_CLIENT_SECRET} --param GITHUB_OAUTH_CLIENT_ID=#{GITHUB_OAUTH_CLIENT_ID} --param HTTP=true https://raw.githubusercontent.com/fabric8io/fabric8-resources/master/fabric8-system-openshift.yml -n fabric8
 
 oc adm policy add-role-to-user admin developer -n developer
 oc adm policy add-role-to-user admin developer -n fabric8
