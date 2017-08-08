@@ -20,7 +20,7 @@ echo http://keycloak-fabric8.$(minishift ip).nip.io/auth/realms/fabric8/broker/g
 So please follow the following steps using the above redirect URL and `http://fabric8.io` as a sample homepage URL:
 
 
-![Register OAuth App](./images/register-oauth.png)
+![Register OAuth App](https://raw.githubusercontent.com/fabric8io/fabric8-platform/master/images/register-oauth.png)
 
 
 Once you have created the OAuth application for fabric8 in your github settings and found your client ID and secret then type the following:
