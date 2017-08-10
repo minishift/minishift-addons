@@ -1,0 +1,10 @@
+# Name: cors
+# Description: Configures OpenShift to allow cross-origin requests from any address
+
+# TODO: This will add an entry every time is executed. Not the best sed command
+docker exec origin sed -i '/corsAllowedOrigins/ a \- .*' /var/lib/origin/openshift.local.config/master/master-config.yaml
+
+# openshift ex config patch openshift.local.config/master/master-config.yaml --patch='{"corsAllowedOrigins": [".*"]}'
+docker restart origin
+
+echo CORS is now allowed from any address
