@@ -1,0 +1,35 @@
+# Name: helm
+# Description: Installs helm
+
+# Pull the image
+docker pull lachlanevenson/k8s-helm:v2.5.0
+# Deploy helm
+docker run --rm -v /home/docker:/root:z -v /var/lib/minishift/openshift.local.config:/var/lib/minishift/openshift.local.config:z --net=host --env KUBECONFIG=/var/lib/minishift/openshift.local.config/master/admin.kubeconfig --env HELM_HOST=localhost:8443 lachlanevenson/k8s-helm:v2.5.0 init
+# Create serviceaccounts and add the permissions to it. Then make the deployment use it
+oc create serviceaccount helm -n kube-system
+oc patch deployment/tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccountName":"helm"}}}}' -n kube-system
+oc adm policy add-cluster-role-to-user cluster-admin -z helm -n kube-system
+
+# Expose helm as nodePort
+oc expose deployment/tiller-deploy --target-port=tiller --type=NodePort --name=tiller -n kube-system
+
+#
+echo Get Tiller host URL by runninr these commands in the shell:
+echo   export TILLER_HOST="#{ip}$(oc get svc/tiller -o jsonpath='{.spec.ports[0].nodePort}' -n kube-system --as=system:admin)"
+echo
+echo Initialize the helm client, if not done already
+echo
+echo e.g.
+echo   helm init -c
+echo
+echo Search for an application:
+echo
+echo e.g.
+echo   helm search
+echo
+echo And now deploy an application
+echo 
+echo e.g.
+echo   helm --host $TILLER_HOST --kube-context default/192-168-99-100:8443/system:admin
+echo 
+echo   NOTE: Context my depend on the IP of your minishift instance.
