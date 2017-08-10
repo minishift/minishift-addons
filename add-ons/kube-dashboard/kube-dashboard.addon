@@ -1,0 +1,23 @@
+# Name: kube-dashboard
+# Description: Deploys the kubernetes dashboard
+# Url: https://github.com/kubernetes/dashboard
+
+# oc adm policy add-scc-to-user anyuid system:serviceaccount:kube-dashboard:default
+oc adm new-project kube-dashboard
+oc create deploymentconfig dashboard --image=gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.1 -n kube-dashboard
+oc label dc/dashboard app=kube-dashboard -n kube-dashboard
+oc set probe dc/dashboard --readiness --liveness --open-tcp=9090 --initial-delay-seconds=5 --timeout-seconds=1 -n kube-dashboard
+oc expose dc/dashboard --port=9090 -l app=kube-dashboard -n kube-dashboard
+oc expose svc/dashboard --hostname=dashboard.#{routing-suffix} -l app=kube-dashboard -n kube-dashboard
+oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:kube-dashboard:default
+oc deploy dashboard -n kube-dashboard
+oc rollout status dc/dashboard -n kube-dashboard
+
+echo You have installed #{addon-name}
+echo To access the #{addon-name} go to http://dashboard.#{routing-suffix}
+echo or
+echo Use minishift: 
+echo     minishift openshift service dashboard -n kube-dashboard
+echo 
+echo To delete:
+echo     oc delete project/kube-dashboard --as=system:admin
