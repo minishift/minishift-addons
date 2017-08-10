@@ -1,0 +1,18 @@
+# Name: cockpit
+# Description: Installs cockpit
+# Url: Template from https://raw.githubusercontent.com/cockpit-project/cockpit/master/containers/openshift-cockpit.template
+
+oc adm new-project cockpit
+oc apply -f cockpit-template-orig.json -n cockpit
+oc new-app cockpit-openshift-template -p COCKPIT_KUBE_URL=http://cockpit.#{routing-suffix} -p OPENSHIFT_OAUTH_PROVIDER_URL=https://#{ip}:8443 -p COCKPIT_KUBE_INSECURE=true -l app=cockpit -n cockpit
+oc expose svc/openshift-cockpit --hostname=cockpit.#{routing-suffix} --port=http -l app=cockpit  -n cockpit
+
+echo You have installed #{addon-name}
+echo To access #{addon-name} go to http://cockpit.#{routing-suffix}
+echo or
+echo Use minishift: 
+echo     minishift openshift service openshift-cockpit -n cockpit
+echo 
+echo To delete:
+echo     oc delete oauthclients/cockpit-oauth-client project/cockpit --as=system:admin
+
