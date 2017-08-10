@@ -1,0 +1,24 @@
+# Name: prometheus
+# Description: This template creates a Prometheus instance preconfigured to gather OpenShift and Kubernetes platform and node metrics and report them to admins. It is protected by an OAuth proxy that only allows access for users who have view access to the prometheus namespace. You may customize where the images (built from openshift/prometheus and openshift/oauth-proxy) are pulled from via template parameters.
+# Url: https://raw.githubusercontent.com/openshift/origin/master/examples/prometheus/prometheus.yaml
+# Required-Vars: namespace 
+
+# TODO: Once conditional commands are there, create the namespace if it does not exist
+# oc adm new-project prometheus
+oc new-app -f prometheus.yaml -p NAMESPACE=#{namespace} -n #{namespace}
+#
+# Add labels to things for easy removal
+oc label svc/prometheus app=prometheus -n #{namespace}
+oc label configmap/prometheus app=prometheus -n #{namespace}
+oc label secret/prometheus-proxy app=prometheus -n #{namespace}
+oc label secret/prometheus-tls app=prometheus -n #{namespace}
+oc label sa/prometheus app=prometheus -n #{namespace}
+oc label clusterrolebinding/prometheus-cluster-reader app=prometheus
+# Look maybe into modifying the route here
+# oc expose svc/prometheus --name=prometheus-2 --hostname=prometheus.#{routing-suffix} --tls=reencrypt --port=prometheus -l app=prometheus -n #{namespace}
+
+echo You have installed #{addon-name}
+echo To access #{addon-name} go to https://prometheus-#{namespace}.#{routing-suffix}
+echo 
+echo To delete:
+echo     oc delete sa,clusterrolebinding,route,svc,secret,deployment,configmap -l app=prometheus -n #{namespace} --as=system:admin
