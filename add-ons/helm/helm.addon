@@ -14,8 +14,9 @@ oc adm policy add-cluster-role-to-user cluster-admin -z helm -n kube-system
 oc expose deployment/tiller-deploy --target-port=tiller --type=NodePort --name=tiller -n kube-system
 
 #
-echo Get Tiller host URL by runninr these commands in the shell:
+echo Get Tiller host URL and minishift's admin context by running these commands in the shell:
 echo   export TILLER_HOST="#{ip}$(oc get svc/tiller -o jsonpath='{.spec.ports[0].nodePort}' -n kube-system --as=system:admin)"
+echo   export KUBE_CONTEXT="default/$(oc config view -o jsonpath='{.contexts[?(@.name=="minishift")].context.cluster}')/system:admin"
 echo
 echo Initialize the helm client, if not done already
 echo
@@ -30,6 +31,7 @@ echo
 echo And now deploy an application
 echo 
 echo e.g.
-echo   helm --host $TILLER_HOST --kube-context default/192-168-99-100:8443/system:admin
-echo 
-echo   NOTE: Context my depend on the IP of your minishift instance.
+echo   helm --host $TILLER_HOST --kube-context $KUBE_CONTEXT
+echo
+echo To delete helm tiller
+echo   oc delete sa/helm deployment/tiller-deploy svc/tiller -n kube-system --as=system:admin
