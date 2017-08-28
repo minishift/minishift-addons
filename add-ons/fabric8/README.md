@@ -33,7 +33,7 @@ We currently recommend you use at least 5Gb of RAM in your minishift VM and toda
 
 So start minishift using something like this:
 
-    $ minishift start --memory=5GB --cpus=5 --disk-size=50g
+    $ minishift start --memory=5GB --cpus=5 --disk-size=50GB
 
 <a name="setup-github-oauth-client-id-and-secret"></a>
 ### Setup GitHub OAuth client ID and secret
