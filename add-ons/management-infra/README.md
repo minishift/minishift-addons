@@ -1,9 +1,7 @@
 # management-infra Add-on
 An addon to create objects to support ManageIQ or CloudForms 
 
-NOTE: Requires Origin >= 3.6.0
-
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+NOTE: Requires OCP >= 3.6.0
 
 ## Deploy management-infra
 To deploy management-infra do:
