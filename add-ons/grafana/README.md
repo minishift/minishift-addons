@@ -2,8 +2,6 @@
 An addon that will deploy grafana with hawkular and prometheus datasources.
 It requires to connect to hawkular-metrics, provided by management-infra addon.
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
-
 ## Deploy grafana
 To deploy grafana do:
 
@@ -22,7 +20,7 @@ $ minishift openshift service hawkular-grafana -n <namespace>
 
 Add a datasource with:
 * Type: Hawkular
-* Url: the route given on "minishift openshift service hawkular-metrics -n openshift-infra" ended with /hawkular/metrics. Ex: https://hawkular-metrics-openshift-infra.192.168.99.100.nip.io/hawkular/metrics
+* Url: the route given on "minishift openshift service hawkular-metrics -n openshift-infra" ended with /hawkular/metrics. Ex: http://hawkular-metrics-openshift-infra.192.168.99.100.nip.io/hawkular/metrics
 * Access: proxy
 * Auth type: With Credentials
 * Tenant: _system (or any namespace)
