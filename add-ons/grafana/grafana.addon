@@ -1,0 +1,16 @@
+# Name: grafana
+# Description: This template adds grafana for displaying Openshift Metrics in its own namespace. If requires metrics and management-infra addon, to connect to hawkular-metrics on openshift.
+# Url: https://raw.githubusercontent.com/hawkular/hawkular-grafana-datasource/master/openshift/openshift-template-persistent.yml
+# Required-Vars: namespace 
+
+# TODO: Once conditional commands are there, create the namespace if it does not exist
+oc adm new-project #{namespace}
+oc new-app -f openshift-template-persistent.yml -n #{namespace}
+
+echo You have installed #{addon-name}
+echo To access #{addon-name} go to http://hawkular-grafana-#{namespace}.#{routing-suffix}
+echo See http://www.hawkular.org/blog/2016/10/24/hawkular-metrics-openshift-and-grafana.html
+echo To get a permanent credential token, if management-infra addons is installed, use "oc sa get-token management-admin -n management-infra --as=system:admin"
+echo 
+echo To delete:
+echo     oc delete project -n #{namespace} --as=system:admin
