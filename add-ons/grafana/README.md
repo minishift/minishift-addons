@@ -1,12 +1,25 @@
-# Grafana Add-on
-An addon that will deploy grafana with hawkular and prometheus datasources.
-It requires to connect to hawkular-metrics, provided by management-infra addon, and metrics should be enabled with --metrics on start up.
+
+# Grafana Add-on
+
+This addon install grafana for metrics visualization
+
+## Prerequisites
+
+Start minishift with --metrics option and memory 4 GB or more
+
+Run 'management-infra' addon as:
+
+```
+$ minishift addon install management-infra  
+$ minishift addon apply management-infra
+```
 
 ## Deploy grafana
+
 To deploy grafana do:
 
 ```
-minishift addon apply grafana --addon-env namespace=grafana
+$ minishift addon apply grafana --addon-env namespace=grafana
 ```
 
 _NOTE_: You should provide the namespace where it will be installed with the addon-env namespace.
@@ -37,5 +50,5 @@ An [example](cluster-metrics-per-namespace.json) is provided in this folder. Whe
 Delete grafana with:
 
 ```
-oc delete oc delete project -n <namespace> --as=system:admin
+$ oc delete oc delete project -n <namespace> --as=system:admin
 ```
