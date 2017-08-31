@@ -22,13 +22,13 @@ To deploy grafana do:
 $ minishift addon apply grafana --addon-env namespace=grafana
 ```
 
-_NOTE_: You should provide the namespace where it will be installed with the addon-env namespace.
+_NOTE_: namespace is a required environment variable for the add-on to run. Refer [addon-dynamic-variables](https://docs.openshift.org/latest/minishift/using/addons.html#addon-dynamic-variables) documentation.
 
 ## Use grafana
 grafana will be available at:
 
 ```
-$ minishift openshift service hawkular-grafana -n <namespace>
+$ minishift openshift service hawkular-grafana -n grafana
 ```
 
 After connecting to grafana, you should log as user: admin, password: admin
@@ -50,5 +50,5 @@ An [example](cluster-metrics-per-namespace.json) is provided in this folder. Whe
 Delete grafana with:
 
 ```
-$ oc delete oc delete project -n <namespace> --as=system:admin
+$ oc delete oc delete project -n grafana --as=system:admin
 ```
