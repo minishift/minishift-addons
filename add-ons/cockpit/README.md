@@ -1,7 +1,7 @@
 # Cockpit Add-on
 An addon to install [cockpit](http://cockpit-project.org/).
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+Verify you have installed these addons, by following the [general readme](../../README.adoc#download-and-use-community-add-ons).
 
 ## Deploy cockpit
 To deploy cockpit

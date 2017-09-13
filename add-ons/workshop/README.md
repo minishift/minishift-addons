@@ -1,7 +1,7 @@
 #OpenShift Workshop Add-on
 An addon to install an [OpenShift Workshop](https://github.com/osevg/workshop-content)
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+Verify you have installed these addons, by following the [general readme](../../README.adoc#download-and-use-community-add-ons).
 
 ## Deploy workshop
 To deploy this workshop do:

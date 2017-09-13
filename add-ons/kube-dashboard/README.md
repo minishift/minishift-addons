@@ -1,7 +1,7 @@
 # Kubernetes dashboard Add-on
 An addon to install [kubernetes-dashboard](https://github.com/kubernetes/dashboard)
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+Verify you have installed these addons, by following the [general readme](../../README.adoc#download-and-use-community-add-ons).
 
 ## Deploy kube-dashboard
 To deploy kube-dashboard do
