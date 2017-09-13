@@ -34,4 +34,4 @@ echo Or you can watch in the OpenShift console via:
 echo   minishift console
 echo -
 echo Then you should be able the open the fabric8 console here:
-echo   https://fabric8-fabric8.#{routing-suffix}/
+echo   http://fabric8-fabric8.#{routing-suffix}/
