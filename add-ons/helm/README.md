@@ -1,7 +1,7 @@
 # Helm Add-on
 Installs [kubernetes helm](https://github.com/kubernetes/helm) tiller into minishift. Tiller is the server side part of helm.
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+Verify you have installed these addons, by following the [general readme](../../README.adoc#download-and-use-community-add-ons).
 
 ## Deploy helm tiller
 To deploy tiller on OpenShift, apply this addon:
