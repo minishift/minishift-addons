@@ -19,7 +19,7 @@ $ minishift openshift service openshift-cockpit -n cockpit
 
 You will need to log in with same user and creadentials as to OpenShift
 
-## Delete cockpit
+## Delete cockpit
 To delete cockpit, just do:
 
 ```

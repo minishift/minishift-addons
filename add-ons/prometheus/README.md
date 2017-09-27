@@ -1,5 +1,5 @@
-# Prometheus Add-on
-An addon that will deploy Prometheus. 
+# Prometheus Add-on
+An addon that will deploy Prometheus.
 
 NOTE: Requires Origin >= 3.6.0-rc.0
 

@@ -23,7 +23,7 @@ Minishift's admin context can be used like this:
 $ export MINISHIFT_ADMIN_CONTEXT="default/$(oc config view -o jsonpath='{.contexts[?(@.name=="minishift")].context.cluster}')/system:admin"
 ```
 
-## Use helm with minishift
+## Use helm with minishift
 Once helm tiller has been deployed into minishift, you should configure your local helm instance to talk to this host.
 
 To use helm, provide the minishift host to your helm config or to any helm command:
@@ -32,7 +32,7 @@ To use helm, provide the minishift host to your helm config or to any helm comma
 $ helm init --host $TILLER_HOST -c
 ```
 
-or 
+or
 
 ```
 $ helm <operation> --host $TILLER_HOST
@@ -53,7 +53,7 @@ $ helm install <app> --host $TILLER_HOST --kube-context $MINISHIFT_ADMIN_CONTEXT
 
 _NOTE_: Minishift admin context can be skipped if selected by default
 
-## Delete tiller
+## Delete tiller
 If you want to delete tiller, just do:
 
 ```

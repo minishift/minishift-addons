@@ -1,5 +1,5 @@
-# management-infra Add-on
-An addon to create objects to support ManageIQ or CloudForms 
+# management-infra Add-on
+An addon to create objects to support ManageIQ or CloudForms
 
 NOTE: Requires OCP >= 3.6.0
 
