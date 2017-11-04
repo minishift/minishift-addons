@@ -1,9 +1,9 @@
-# Prometheus Add-on
-An addon that will deploy Prometheus. 
+# Prometheus Add-on
+An addon that will deploy Prometheus.
 
 NOTE: Requires Origin >= 3.6.0-rc.0
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+Verify you have installed these addons, by following the [general readme](../../README.adoc#download-and-use-community-add-ons).
 
 ## Deploy prometheus
 To deploy prometheus do:

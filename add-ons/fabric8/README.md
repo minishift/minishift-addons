@@ -33,7 +33,7 @@ We currently recommend you use at least 5Gb of RAM in your minishift VM and toda
 
 So start minishift using something like this:
 
-    $ minishift start --memory=5000 --cpus=5 --disk-size=50g
+    $ minishift start --memory=5GB --cpus=5 --disk-size=50GB
 
 <a name="setup-github-oauth-client-id-and-secret"></a>
 ### Setup GitHub OAuth client ID and secret
@@ -53,7 +53,7 @@ So please follow the following steps using the above redirect URL and `http://fa
 Once you have created the OAuth application for Fabric8 in your GitHub settings and found your client ID and secret, set the following environment variables:
 
     $ export GITHUB_OAUTH_CLIENT_ID=TODO
-    $export GITHUB_OAUTH_CLIENT_SECRET=TODO
+    $ export GITHUB_OAUTH_CLIENT_SECRET=TODO
 
 where the above `TODO` text is replaced by the actual client id and secret from your GitHub settings page!
 
@@ -63,4 +63,3 @@ where the above `TODO` text is replaced by the actual client id and secret from 
 Once you have the 2 GitHub environment variables defined you can apply the Fabric8 addon via:
 
     $ minishift addon apply --addon-env GITHUB_OAUTH_CLIENT_ID=$GITHUB_OAUTH_CLIENT_ID --addon-env GITHUB_OAUTH_CLIENT_SECRET=$GITHUB_OAUTH_CLIENT_SECRET fabric8
-

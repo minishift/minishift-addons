@@ -1,0 +1,14 @@
+# Name: che
+# Description: Remove add on
+# Url: https://www.eclipse.org/che/docs/setup/openshift/index.html
+
+echo [CHE] Removing Image Stream
+oc delete -f streams/che-server-streams.json -n openshift
+
+echo [CHE] Removing Che server Template 
+oc delete -f templates/che-single-user.yml -n openshift
+
+echo [CHE] Removing mini-che project
+oc delete project mini-che
+
+echo Eclipse Che addon removed  

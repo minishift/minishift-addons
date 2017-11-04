@@ -1,23 +1,23 @@
-#OpenShift Workshop Add-on
+# OpenShift Workshop Add-on
 An addon to install an [OpenShift Workshop](https://github.com/osevg/workshop-content)
 
-Verify you have installed these addons, by following the [general readme](../../Readme.adoc#download-and-use-community-add-ons).
+Verify you have installed these addons, by following the [general readme](../../README.adoc#download-and-use-community-add-ons).
 
-## Deploy workshop
+## Deploy workshop
 To deploy this workshop do:
 
 ```
 $ minishift addon apply workshop
 ```
 
-## Use workshop
+## Use workshop
 To access it:
 
 ````
 $ minishift openshift service workshop -n workshop
 ````
 
-## Delete workshop
+## Delete workshop
 To delete the workshop do:
 
 ```
