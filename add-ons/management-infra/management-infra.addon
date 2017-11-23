@@ -1,6 +1,5 @@
 # Name: management-infra
 # Description: Creates management objects for ManageIQ, Cloudforms, etc
-# Required-Vars: 
 
 echo Creating management-infra project
 oc new-project management-infra --description="Management Infrastructure" --as=system:admin
