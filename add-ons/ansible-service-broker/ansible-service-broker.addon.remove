@@ -1,0 +1,14 @@
+# Name: ansible-service-broker
+# Description: Removes the Ansible Service Broker
+# Required-vars:
+
+# Delete cluster resources
+oc delete clusterrolebinding asb
+oc delete clusterrolebinding asb-auth-bind
+oc delete clusterrolebinding ansibleservicebroker-client
+oc delete clusterrole asb-auth
+oc delete clusterrole access-asb-role
+oc delete broker ansible-service-broker
+
+# Delete ansible-service-broker project
+oc delete project ansible-service-broker
