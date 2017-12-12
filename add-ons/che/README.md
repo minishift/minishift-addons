@@ -35,6 +35,7 @@ One workaround would be to enable the `anyuid` addon. Another way would be to [r
 Clone this repository onto your local machine and then install the add-on via:
 
     $ minishift addons install <path_to_directory_containing_this_readme>
+    $ minishift addons install <path_to_directory_containing_this_readme>/../che-stacks/
     $ minishift addons enable che
 
 
@@ -64,10 +65,7 @@ If Minishift is already started and che addon is installed. It is possible to de
 ### Replace Che stacks
 Once Che is up and running,
 
-    $ STACKS_SCRIPT_URL=https://raw.githubusercontent.com/eclipse/che/master/dockerfiles/init/modules/openshift/files/scripts/replace_stacks.sh
-    $ curl -fsSL ${STACKS_SCRIPT_URL} -o ./stacks-che.sh
-    $ oc project mini-che && bash ./stacks-che.sh
-
+    $ minishift addons apply che-stacks
 
 <a name="remove-add-on"></a>
 ### Remove add-on
