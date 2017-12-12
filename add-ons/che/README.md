@@ -35,6 +35,7 @@ One workaround would be to enable the `anyuid` addon. Another way would be to [r
 Clone this repository onto your local machine and then install the add-on via:
 
     $ minishift addons install <path_to_directory_containing_this_readme>
+    $ minishift addons install <path_to_directory_containing_this_readme>/../che-stacks/
     $ minishift addons enable che
 
 
