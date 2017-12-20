@@ -4,7 +4,7 @@
 
 This add-on deploys the https://Istio.io/[Istio] **servicemesh** on to Minishift-provisioned OpenShift cluster.
 
-NOTE: The add-on was tested with Istio release v0.2.12
+NOTE: The add-on was tested with Istio release v0.3.0
 
 == Minishift profile setup
 
@@ -45,16 +45,16 @@ $ curl -L https://git.io/getLatestIstio | sh -
 $ ISTIO_HOME=$(find `pwd` -maxdepth 1 -name \*istio\* -type d)
 ----
 
-The following PowerShell commands show how to download Istio 0.2.12 version for Windows and set the `ISTIO_HOME` environment variable:
+The following PowerShell commands show how to download Istio 0.3.0 version for Windows and set the `ISTIO_HOME` environment variable:
 
 [code,powershell]
 ----
-# $url = "https://github.com/istio/istio/releases/download/0.2.12/istio_0.2.12_win.zip"
+# $url = "https://github.com/istio/istio/releases/download/0.3.0/istio_0.3.0_win.zip"
 # $Path = Get-Location
-# $output = "$Path\istio_0.2.12_win.zip”
+# $output = "$Path\istio_0.3.0_win.zip”
 # (New-Object System.Net.WebClient).DownloadFile($url, $output)
 # Expand-Archive $output -DestinationPath $Path
-# [Environment]::SetEnvironmentVariable("ISTIO_HOME", "$Path\istio-0.2.12", "User")
+# [Environment]::SetEnvironmentVariable("ISTIO_HOME", "$Path\istio-0.3.0", "User")
 ----
 
 == Install add-on
