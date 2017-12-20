@@ -40,6 +40,8 @@ kafka-connect-3-3v4n9   1/1       Running     1          3m
 zookeeper-0             1/1       Running     0          3m
 ```
 
+**Note:** You might see one or two debezium builds in the above output depending on the timing of `oc get pods` command. In both the cases it is fine.
+
 ## Supported parameters
 * `DEBEZIUM_VERSION` - the verson of Debezium to be used (only released versions are supported)
 * `DEBEZIUM_PLUGIN` - which plugin should be added into the Connect cluster
@@ -73,6 +75,8 @@ Then we are going to register the Debezium MySQL connector to run against the de
 ```
 cat register.json | oc exec -i kafka-0 -- curl -s -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://kafka-connect:8083/connectors -d @-
 ```
+
+ **Note:** You can find the register.json in the debezium add-on directory.
 
 Kafka Connect's log file should contain messages regarding execution of initial snapshot:
 
