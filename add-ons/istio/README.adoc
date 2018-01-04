@@ -1,0 +1,97 @@
+:linkattrs:
+
+= Istio Add-on
+
+This add-on deploys the https://Istio.io/[Istio] **servicemesh** on to Minishift-provisioned OpenShift cluster.
+
+NOTE: The add-on was tested with Istio release v0.3.0
+
+== Minishift profile setup
+
+The standard Istio setup deploys around four to five applications like *istio-ingress*, *istio-egress*, *istio-pilot*, *grafana*, *prometheus* and their related resources
+such as https://kubernetes.io/docs/tasks/configure-pod-container/configmap/[configmaps], https://kubernetes.io/docs/concepts/configuration/secret/[secrets] 
+and https://kubernetes.io/docs/concepts/api-extension/custom-resources/[Custom Resource Definitions].
+
+Considering this, it is ideal to setup a Minishift profile with the following configuration:
+
+[code,sh]
+----
+$ minishift profile set servicemesh <1>
+$ minishift config set memory 8GB <2>
+$ minishift config set cpus 3 <3>
+$ minishift config set openshift-version v3.7.0 <4>
+$ minishift addon enable admin-user <5>
+$ minishift addon enable anyuid <6>
+$ minishift start <7>
+----
+
+<1> Create a new Minishift profile named **servicemesh**
+<2> Use 8GB of memory for Istio and apps that you might deploy later
+<3> 3 CPUs results in a maximum of 30 pods, since Istio deploys approximately 9 pods at minimum
+<4> Istio 0.2.x and above requires OpenShift version 3.7.x or above
+<5> Enable Minishift `admin-user` add-on 
+<6> Enable the Minishift `anyuid` add-on.  For more details on OpenShift SCC, see link:https://docs.openshift.org/latest/admin_guide/manage_scc.html[Managing Security Context Constraints]
+<7> Since we have set the profile to be **servicemesh**, this command starts Minishift with profile **servicemesh**
+
+== Preparing Istio 
+Download Istio corresponding to your platform from https://github.com/istio/istio/releases[Download an Istio release] extract it to a folder of your choice
+and export that folder as `ISTIO_HOME`.
+
+On macOS/Linux machines you can use the following commands to download the latest version of Istio and set the `ISTIO_HOME` environment variable:
+
+[code,sh]
+----
+$ curl -L https://git.io/getLatestIstio | sh -
+$ ISTIO_HOME=$(find `pwd` -maxdepth 1 -name \*istio\* -type d)
+----
+
+The following PowerShell commands show how to download Istio 0.3.0 version for Windows and set the `ISTIO_HOME` environment variable:
+
+[code,powershell]
+----
+# $url = "https://github.com/istio/istio/releases/download/0.3.0/istio_0.3.0_win.zip"
+# $Path = Get-Location
+# $output = "$Path\istio_0.3.0_win.zip”
+# (New-Object System.Net.WebClient).DownloadFile($url, $output)
+# Expand-Archive $output -DestinationPath $Path
+# [Environment]::SetEnvironmentVariable("ISTIO_HOME", "$Path\istio-0.3.0", "User")
+----
+
+== Install add-on
+
+Run the following command to install `istio` add-on:
+
+[code,sh]
+----
+$ git clone https://github.com/minishift/minishift-addons
+$ minishift addon install ./minishift-addons/add-ons/istio
+----
+
+== Deploy Istio
+
+Run the following command to apply `istio` add-on:
+
+[code,sh]
+----
+$ minishift addon apply istio --addon-env ISTIO_HOME=$ISTIO_HOME
+----
+
+== Undeploy Istio
+
+Removing the `istio` add-on will undeploy Istio from the Minishift-provisioned OpenShift cluster.
+
+Run the following command to remove the `istio` add-on:
+
+[code,sh]
+----
+$ minishift addon remove istio
+----
+
+== Uninstall Istio add-on
+
+Run the following command to delete and remove the `istio` add-on artifacts from the machine:
+
+[code,sh]
+----
+$ minishift addon uninstall istio
+----

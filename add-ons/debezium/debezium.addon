@@ -1,0 +1,29 @@
+# Name: debezium
+# Description: Deploys a Kafka Cluster and a Connect cluster with Debezium
+# Required-Vars: DEBEZIUM_VERSION,DEBEZIUM_PLUGIN,PROJECT,BARNABAS_RELEASE
+# Var-Defaults: BARNABAS_RELEASE=0.1.0-rc1,BARNABAS_REPO_NAME=enmasseproject,BARNABAS_IMAGE_TAG=latest,PROJECT=debezium
+
+# Pull images
+echo Pulling images...
+docker pull #{BARNABAS_REPO_NAME}/zookeeper:#{BARNABAS_IMAGE_TAG}
+docker pull #{BARNABAS_REPO_NAME}/kafka-statefulsets:#{BARNABAS_IMAGE_TAG}
+docker pull #{BARNABAS_REPO_NAME}/kafka-connect-s2i:#{BARNABAS_IMAGE_TAG}
+
+# Install templates
+oc create -f https://raw.githubusercontent.com/EnMasseProject/barnabas/#{BARNABAS_RELEASE}/kafka-statefulsets/resources/openshift-template.yaml -n #{PROJECT}
+oc create -f https://raw.githubusercontent.com/EnMasseProject/barnabas/#{BARNABAS_RELEASE}/kafka-connect/s2i/resources/openshift-template.yaml -n #{PROJECT}
+
+# Deploy Kafka components
+echo Deploying ZooKeeper...
+oc new-app -p ZOOKEEPER_NODE_COUNT=1 -n #{PROJECT} barnabas
+
+# Deploy Debezium build config and deployment config
+echo Deploying Kafka broker...
+oc new-app -p BUILD_NAME=debezium -p TARGET_IMAGE_NAME=debezium -p TARGET_IMAGE_TAG=#{DEBEZIUM_VERSION} -n #{PROJECT} barnabas-connect-s2i
+
+# Build a Connect image with Debezium
+sleep 10
+echo Deploying Debezium...
+oc start-build debezium --from-archive http://central.maven.org/maven2/io/debezium/debezium-connector-#{DEBEZIUM_PLUGIN}/#{DEBEZIUM_VERSION}/debezium-connector-#{DEBEZIUM_PLUGIN}-#{DEBEZIUM_VERSION}-plugin.tar.gz -n #{PROJECT} --follow
+
+echo Completed, wait for Debezium start!

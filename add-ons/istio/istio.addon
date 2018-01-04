@@ -1,0 +1,37 @@
+# Name: istio
+# Description: Deploys Latest Istio
+# Url: https://github.com/istio/istio
+# Required-Vars: ISTIO_HOME
+# OpenShift-Version: >=3.7.0
+
+# From istio doc
+oc adm policy add-scc-to-user anyuid -z istio-ingress-service-account -n istio-system
+oc adm policy add-scc-to-user anyuid -z istio-egress-service-account -n istio-system
+oc adm policy add-scc-to-user anyuid -z istio-pilot-service-account -n istio-system
+oc adm policy add-scc-to-user anyuid -z default -n istio-system
+
+# Create Istio 
+oc create -f #{ISTIO_HOME}/install/kubernetes/istio.yaml
+
+oc expose svc istio-ingress -n istio-system
+
+# Add Istio Addons 
+oc create -f #{ISTIO_HOME}/install/kubernetes/addons/prometheus.yaml
+oc create -f #{ISTIO_HOME}/install/kubernetes/addons/grafana.yaml
+oc create -f #{ISTIO_HOME}/install/kubernetes/addons/servicegraph.yaml
+oc expose svc grafana -n istio-system
+oc expose svc servicegraph -n istio-system
+oc expose svc prometheus -n istio-system
+
+# Install Jaeger
+oc apply -f templates/jaeger-all-in-one.yml -n openshift
+oc new-app jaeger-template-all-in-one -n istio-system
+
+# Add the any uid permission to the default myproject
+oc adm policy add-scc-to-user anyuid -z default -n myproject
+oc adm policy add-scc-to-user privileged -z default -n myproject
+
+oc project myproject
+
+echo 'Please wait for few seconds before all pods are up!'
+echo 'Watch the pods status via minishift console or oc get pods -w --all-namespaces --as system:admin'
