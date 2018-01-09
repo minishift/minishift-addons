@@ -1,9 +1,9 @@
 # Name: che
 # Description: Setup and Configure Eclipse Che Template and Image Streams
 # Url: https://www.eclipse.org/che/docs/setup/openshift/index.html
-# Required-Vars: NAMESPACE
-# Var-Defaults: NAMESPACE=mini-che
-# OpenShift-Version: >=3.7.0
+# Required-Vars: NAMESPACE, CHE_DOCKER_IMAGE_TAG, OPENSHIFT_TOKEN, CHE_HOST_PREFIX, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
+# Var-Defaults: NAMESPACE=mini-che, CHE_DOCKER_IMAGE_TAG=latest, OPENSHIFT_TOKEN="changeme", CHE_HOST_PREFIX="che-", GITHUB_CLIENT_ID="changeme", GITHUB_CLIENT_SECRET="changeme"
+# OpenShift-Version: >=3.5.0
 
 echo [CHE] Create Image Stream
 oc apply -f streams/che-server-streams.json -n openshift
@@ -14,9 +14,10 @@ oc apply -f templates/che-single-user.yml -n openshift
 echo [CHE] Creating #{NAMESPACE} project as developer
 oc adm new-project #{NAMESPACE} --description="Eclipse Che on minishift"
 oc adm policy add-role-to-user admin developer -n #{NAMESPACE}
+oc adm policy add-role-to-user system:image-builder developer -n openshift
 
 echo [CHE] Deploying Che on minishift
-oc new-app --param DOMAIN_NAME=#{ip}.nip.io che-single-user -n #{NAMESPACE} 
+oc new-app --param IMAGE_TAG=#{CHE_DOCKER_IMAGE_TAG} --param PROJECT_NAME=#{NAMESPACE} --param DOMAIN_NAME=#{ip}.nip.io --param OPENSHIFT_OAUTH_TOKEN=#{OPENSHIFT_TOKEN} --param CHE_HOST_PREFIX=#{CHE_HOST_PREFIX} --param GITHUB_CLIENT_ID=#{GITHUB_CLIENT_ID} --param GITHUB_CLIENT_SECRET=#{GITHUB_CLIENT_SECRET} che-single-user -n #{NAMESPACE} 
 
 echo Please wait while the pods all startup!
 echo You can watch in the OpenShift console via:

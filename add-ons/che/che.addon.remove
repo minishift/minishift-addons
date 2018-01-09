@@ -12,5 +12,6 @@ oc delete -f templates/che-single-user.yml -n openshift
 
 echo [CHE] Removing #{NAMESPACE} project
 oc delete project #{NAMESPACE}
+oc adm policy remove-role-from-user system:image-builder developer -n openshift
 
 echo Eclipse Che addon removed  

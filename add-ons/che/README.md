@@ -26,12 +26,6 @@ The best way of using this add-on is via the [`minishift add-ons apply`](https:/
 
 <a name="install-add-on"></a>
 ### Install add-on
-Che default stacks require root privilege to run sshd. Without root privilege, workspaces will take more time to timeout and start.
-One workaround would be to enable the `anyuid` addon. Another way would be to [replace the existing stacks](#replace-stacks) with the ones without the `sshd` agent.
-
-    $ minishift addons install --defaults
-    $ minishift addons enable anyuid
-
 Clone this repository onto your local machine and then install the add-on via:
 
     $ minishift addons install <path_to_directory_containing_this_readme>
@@ -56,25 +50,53 @@ we recommand to start Minishift with at least 5GB:
 ### Apply add-on
 If Minishift is already started and che addon is installed. It is possible to deploy che without restarting Minishift:
 
+#### Deploy Che latest (stable)
 
-    $ minishift addons apply che
+    $ minishift addons apply --addon-env CHE_HOST_PREFIX="" che
 
+#### Deploy Che nightly (unstable)
 
-<a name="replace-stacks"></a>
-### Replace Che stacks
-Once Che is up and running,
+    $minishift addons apply \
+        --addon-env CHE_DOCKER_IMAGE_TAG=nightly \
+        --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) \
+        che
 
-    $ STACKS_SCRIPT_URL=https://raw.githubusercontent.com/eclipse/che/master/dockerfiles/init/modules/openshift/files/scripts/replace_stacks.sh
-    $ curl -fsSL ${STACKS_SCRIPT_URL} -o ./stacks-che.sh
-    $ oc project mini-che && bash ./stacks-che.sh
+#### Deploy a local che-server image
 
+To deploy a local che-server image we need to update the che-server image stream with your local image. For example, if you have selected the set `CHE_DOCKER_IMAGE_TAG=nightly` you will need to update the `nightly` image stream:
+
+    $ LOCAL_DOCKER_IMAGE=eclipse/che-server:local
+    $ IMAGE_STREAM=nightly
+    $ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
+    $ docker tag ${LOCAL_DOCKER_IMAGE} $(minishift openshift registry)/openshift/che-server:${IMAGE_STREAM}
+    $ docker push $(minishift openshift registry)/openshift/che-server:${IMAGE_STREAM}
+
+#### Addon Variables
+
+To customize the deployment of the Che server, the following variables can be applied to the execution:
+
+|Name|Description|Default Value|
+|----|-----------|-------------|
+|`NAMESPACE`|The OpenShift project where Che service will be deployed|`che-mini`|
+|`CHE_DOCKER_IMAGE_TAG`|The docker image tag to be used for che. Possible values are latest and nightly|`latest`|
+|`GITHUB_CLIENT_ID`|GitHub client ID to be used in Che workspaces|`changeme`|
+|`GITHUB_CLIENT_SECRET`|GitHub client secred to be used in Che workspaces|`changeme`|
+|`OPENSHIFT_TOKEN`|OpenShift token needed to create OpenShift resources (pods, services, routes, etc...) for workspaces (required to run Che v6 and above)|`changeme`|
+|`CHE_HOST_PREFIX`|Prefix to be used in worksapces agents services (should be che for Che v6 and the empty string for Che v5)|`che`|
+
+Variables can be specified by adding `--addon-env <key=value>` when the addon is being invoked (either by `minishift start` or `minishift addons apply`).
 
 <a name="remove-add-on"></a>
 ### Remove add-on
 To remove all created template and che project:
 
-
-    $ minishift addons remove che
+    $ minishift addons remove \
+        --addon-env OPENSHIFT_TOKEN="" \
+        --addon-env CHE_DOCKER_IMAGE_TAG="" \
+        --addon-env CHE_HOST_PREFIX="" \
+        --addon-env GITHUB_CLIENT_ID="" \
+        --addon-env GITHUB_CLIENT_SECRET="" \
+        --addon-env NAMESPACE=mini-che che
 
 <a name="uninstall-add-on"></a>
 ### Uninstall add-on
