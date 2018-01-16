@@ -52,7 +52,7 @@ If Minishift is already started and che addon is installed. It is possible to de
 #### Deploy Che v5 (stable)
 
 ```bash
-$ minishift addons apply --addon-env CHE_HOST_PREFIX="" che
+$ minishift addons apply che
 ```
 
 #### Deploy Che v6 (unstable)
@@ -87,7 +87,6 @@ To customize the deployment of the Che server, the following variables can be ap
 |`GITHUB_CLIENT_ID`|GitHub client ID to be used in Che workspaces|`changeme`|
 |`GITHUB_CLIENT_SECRET`|GitHub client secred to be used in Che workspaces|`changeme`|
 |`OPENSHIFT_TOKEN`|For Che v6 only. The token to create workspace resources (pods, services, routes, etc...)|`changeme`|
-|`CHE_HOST_PREFIX`|For Che v5 only. Set it to the empty string to run Che v5|`che`|
 
 Variables can be specified by adding `--addon-env <key=value>` when the addon is being invoked (either by `minishift start` or `minishift addons apply`).
 
@@ -98,7 +97,6 @@ To remove all created template and che project:
     $ minishift addons remove \
         --addon-env OPENSHIFT_TOKEN="" \
         --addon-env CHE_DOCKER_IMAGE_TAG="" \
-        --addon-env CHE_HOST_PREFIX="" \
         --addon-env GITHUB_CLIENT_ID="" \
         --addon-env GITHUB_CLIENT_SECRET="" \
         --addon-env NAMESPACE=mini-che che

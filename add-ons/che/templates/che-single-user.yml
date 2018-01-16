@@ -43,10 +43,6 @@ parameters:
     description: GitHub client secret
     name: GITHUB_CLIENT_SECRET
     value: ""
-  - displayName: Che Host Prefix
-    description: This need to be set to "che-" when deploying Che v6 (nightly) and set to the empty string when deploying Che v5 (latest).
-    name: CHE_HOST_PREFIX
-    value: ""
 objects:
   - apiVersion: v1
     kind: RoleBinding
@@ -108,7 +104,7 @@ objects:
         app: che
       name: che
     data:
-      che-host: ${CHE_HOST_PREFIX}${PROJECT_NAME}.${DOMAIN_NAME}
+      che-host: ${PROJECT_NAME}.${DOMAIN_NAME}
       workspace-storage: /home/user/che/workspaces
       workspace-storage-create-folders: "false"
       local-conf-dir: /etc/conf
