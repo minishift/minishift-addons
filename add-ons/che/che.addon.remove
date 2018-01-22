@@ -4,9 +4,6 @@
 # Required-Vars: NAMESPACE
 # Var-Defaults: NAMESPACE=mini-che
 
-echo [CHE] Removing Image Stream
-oc delete -f streams/che-server-streams.json -n openshift
-
 echo [CHE] Removing Che server Template 
 oc delete -f templates/che-single-user.yml -n openshift
 

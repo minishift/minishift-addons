@@ -59,21 +59,26 @@ $ minishift addons apply che
 
 ```bash
 $ minishift addons apply \
-    --addon-env CHE_DOCKER_IMAGE_TAG=nightly \
+    --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:nightly \
     --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) \
     che
 ```
 
 #### Deploy a local che-server image
 
-In order to deploy a local che-server image we to push that image to the `che-server` Image Stream that is created by the addon. For example, if you have set `CHE_DOCKER_IMAGE_TAG=nightly` you will need to update the `che-server:nightly` Image Stream:
+To deploy a local che-server image (e.g. `eclipse/che-server:local`) based on Che v5:
 
 ```bash
-LOCAL_DOCKER_IMAGE=eclipse/che-server:local
-IMAGE_STREAM=nightly
-docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
-docker tag ${LOCAL_DOCKER_IMAGE} $(minishift openshift registry)/openshift/che-server:${IMAGE_STREAM}
-docker push $(minishift openshift registry)/openshift/che-server:${IMAGE_STREAM}
+$ minishift addons apply --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:local che
+```
+
+If the local image is based on Che v6:
+
+```bash
+$ minishift addons apply \
+    --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:local \
+    --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) \
+    che
 ```
 
 #### Addon Variables
@@ -83,7 +88,7 @@ To customize the deployment of the Che server, the following variables can be ap
 |Name|Description|Default Value|
 |----|-----------|-------------|
 |`NAMESPACE`|The OpenShift project where Che service will be deployed|`che-mini`|
-|`CHE_DOCKER_IMAGE_TAG`|The docker image tag to be used for che. Accepted values are `latest` and `nightly`|`latest`|
+|`CHE_DOCKER_IMAGE`|The docker image to be used for che.|`eclipse/che-server:latest`|
 |`GITHUB_CLIENT_ID`|GitHub client ID to be used in Che workspaces|`changeme`|
 |`GITHUB_CLIENT_SECRET`|GitHub client secred to be used in Che workspaces|`changeme`|
 |`OPENSHIFT_TOKEN`|For Che v6 only. The token to create workspace resources (pods, services, routes, etc...)|`changeme`|
@@ -96,7 +101,7 @@ To remove all created template and che project:
 
     $ minishift addons remove \
         --addon-env OPENSHIFT_TOKEN="" \
-        --addon-env CHE_DOCKER_IMAGE_TAG="" \
+        --addon-env CHE_DOCKER_IMAGE="" \
         --addon-env GITHUB_CLIENT_ID="" \
         --addon-env GITHUB_CLIENT_SECRET="" \
         --addon-env NAMESPACE=mini-che che
