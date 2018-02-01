@@ -42,7 +42,6 @@ func getFeatureContext(s *godog.Suite) {
 func parseFlags() {
 	// gets flag values used by Minishift intefration testsuite
 	testsuite.ParseFlags()
-
 	// here you can get additional flag values if needed, for example:
 	// mypackage.ParseFlags()
 }
