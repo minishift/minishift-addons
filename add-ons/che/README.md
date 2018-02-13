@@ -1,7 +1,7 @@
 # Eclipse Che Addon
 
-This addon create Eclipse Che templates, image streams and a project running Che in Minishift. In short this helps in setting up Eclipse Che 
-on Minishift inline with [Deploy Che on Minishift](https://www.eclipse.org/che/docs/setup/openshift/index.html#deploy-che-on-minishift)
+This addon create Eclipse Che templates, image streams and a project running Che in Minishift. In short this helps in setting up Eclipse Che
+on Minishift inline with [Deploy Che on Minishift](https://www.eclipse.org/che/docs/6/che/docs/openshift-single-user.html)
 
 <!-- MarkdownTOC -->
 
@@ -33,7 +33,7 @@ Start Minishift using something like this:
 However, as default memory is set to 2GB and a che-server takes about 700MB memory and a default stack workspace can reach 2GB,
 we recommand to start Minishift with at least 5GB:
 
-    $ minishift start --memory=5GB 
+    $ minishift start --memory=5GB
 
 <a name="install-add-on"></a>
 ### Install add-on
@@ -49,37 +49,43 @@ Clone this repository onto your local machine and then install the add-on via:
 ### Apply add-on
 If Minishift is already started and che addon is installed. It is possible to deploy che without restarting Minishift:
 
-#### Deploy Che v5 (stable)
+#### Deploy Che
 
 ```bash
 $ minishift addons apply che
 ```
 
-#### Deploy Che v6 (unstable)
+#### Deploy a custom che-server image
 
-```bash
-$ minishift addons apply \
-    --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:nightly \
-    --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) \
-    che
-```
-
-#### Deploy a local che-server image
-
-To deploy a local che-server image (e.g. `eclipse/che-server:local`) based on Che v5:
+To deploy a custom che-server image (e.g. `eclipse/che-server:local`):
 
 ```bash
 $ minishift addons apply --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:local che
 ```
 
-If the local image is based on Che v6:
+To deploy latest Che 5.22.1 use:
 
 ```bash
-$ minishift addons apply \
-    --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:local \
-    --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) \
-    che
+$ minishift addons apply --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:5.22.1 che
 ```
+
+If the image is local, aka is not pushed to a cloud registry, this image should be
+present inside of minishift VM. For example:
+
+```bash
+$ eval $(minishift docker-env)
+$ docker build . -t eclipse/che-server:local
+```
+
+#### Use a custom OpenShift token
+
+If you need to customize OpenShift token that is used by Che to access OpenShift API:
+
+```bash
+$ minishift addons apply --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) che
+```
+
+You can use some specific token instead of using `$(oc whoami -t)` to get token of current user.
 
 #### Addon Variables
 

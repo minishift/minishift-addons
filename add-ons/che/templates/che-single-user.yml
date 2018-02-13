@@ -27,11 +27,11 @@ parameters:
     value: "eclipse/che-server:latest"
     required: false
   - displayName: OpenShift OAuth Token
-    description: Token to get access to the OpenShift API 
+    description: Token to get access to the OpenShift API
     name: OPENSHIFT_OAUTH_TOKEN
     value: ""
   - displayName: GitHub client ID
-    description: GitHub client ID  
+    description: GitHub client ID
     name: GITHUB_CLIENT_ID
     value: ""
   - displayName: GitHub client secret
@@ -413,6 +413,11 @@ objects:
                   key: openshift-password
                   name: che
             - name: CHE_INFRA_OPENSHIFT_PROJECT
+              valueFrom:
+                configMapKeyRef:
+                  key: openshift-project
+                  name: che
+            - name: CHE_INFRA_KUBERNETES_NAMESPACE
               valueFrom:
                 configMapKeyRef:
                   key: openshift-project
