@@ -24,14 +24,14 @@ parameters:
   - displayName: Che Server Image
     description: The docker image to be used for che.
     name: IMAGE_CHE_SERVER
-    value: "eclipse/che-server:latest"
+    value: "eclipse/che-server:5.22.1"
     required: false
   - displayName: OpenShift OAuth Token
-    description: Token to get access to the OpenShift API 
+    description: Token to get access to the OpenShift API
     name: OPENSHIFT_OAUTH_TOKEN
     value: ""
   - displayName: GitHub client ID
-    description: GitHub client ID  
+    description: GitHub client ID
     name: GITHUB_CLIENT_ID
     value: ""
   - displayName: GitHub client secret
