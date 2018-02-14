@@ -20,6 +20,9 @@ Thank you for your contributions! Please follow this process to submit a patch:
 NOTE: If you submit a new add-on, the add-on must be added as a sub-directory in the *_/add-ons/_* sub-directory of the repository.
 See the documentation for information about link:https://docs.openshift.org/latest/minishift/using/addons.html#add-ons-overview[file structure and content format].
 
+NOTE: We also recommend providing integration tests for the add-on.
+See the link:TESTING.adoc[integration tests documentation] for more information.
+
 [[questions]]
 == Questions?
 
