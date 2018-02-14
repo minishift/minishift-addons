@@ -1,0 +1,98 @@
+[[integration-tests]]
+= Integration Testing for Add-ons
+:icons:
+:toc: macro
+:toc-title:
+:toclevels: 1
+
+toc::[]
+
+[[introduction]]
+== Introduction
+This repository uses integration test suite from link:https://github.com/minishift/minishift[`minishift/minishift`] repository to test the functionality of the add-ons.
+The test suite is written in Go and uses Gherkin language for definition of test sets.
+This attitude allows add-on contributors to write tests effectively using predefined understandable sentences, for example:
+
+```gherkin
+  Scenario: Applying the CORS add-on
+    Given Minishift has state "Running"
+     When executing "minishift addons apply cors" succeeds
+     Then stdout should contain "CORS is now allowed from any address"
+```
+
+NOTE: We recommend to align to the ends of Gherkin keywords `Given`, `When`, `Then`, `And`.
+
+For more information about Gherkin you can check its link:https://github.com/cucumber/cucumber/wiki/Gherkin[wiki page].
+More in-depth information about Minishift integration test suite can be found at respective part of link:https://docs.openshift.org/latest/minishift/contributing/developing.html#integration-tests[Minishift documentation].
+
+[[structure-of-tests]]
+=== Structure of Tests
+Feature files which define the test cases for each individual addon are stored in `test/integration/features` directory.
+The feature files follow naming convention of `<addon-name>.feature` and begins with the tag `@<addon-name>`.
+
+Integration tests are implemented in `test/integration/integration_test.go` file which imports test suite from Minishift repository and can be used for import of additional step definitions.
+
+To help with execution of integration tests `make integration` target is provided in the Makefile.
+Its usage is covered later in section link:#running-tests[Running Tests]. 
+
+[[prerequisites]]
+== Prerequisites
+To run the test successfully you need to:
+
+- install link:https://docs.openshift.org/latest/minishift/getting-started/installing.html[Minishift and its prerequisites]
+- install recent link:https://golang.org/dl/[Go distribution] (>=1.8)
+- install link:https://github.com/golang/dep[dep package], run: `go get -u github.com/golang/dep/cmd/dep`
+- git clone this repository into `$GOPATH/src/github.com/minishift/minishift-addons`
+- get latest minishift binary from https://github.com/minishift/minishift/releases/latest and put it into `testing/bin`
+- vendor needed Go packages by runining: `make vendor` in root directory of the `minishift-addons` repository
+
+NOTE: We recommend to vendor the packages after every `git pull` from `minishift-addons` master.
+
+[[running-tests]]
+== Running Tests
+To start integration test for selected add-on go to the root directory of `minishift-addons` and run: 
+```
+make integration ADDON=<name-of-addon>
+```
+
+This command will start tests on all Gherkin feature files present at `tests/integration/features` which contains tag `@<name-of-addon>`.
+For most add-ons this will mean using one feature file located at `tests/integration/features/<name-of-addon>.feature`.
+
+To start the tests on all addons you can run command:
+```
+make integration
+```
+
+[[additional-options]]
+=== Additional Options
+
+It is possible to run the tests with Minishift binary located outside of the default location at `testing/bin`.
+To do so use `MINISHIFT_BINARY` parameter with `make integration` target, for example:
+
+```
+make integration ADDON=xpaas MINISHIFT_BINARY=/home/joe/minishift/minishift
+```
+
+[[writting-tests]]
+== Writing Tests
+In order to create a new integration test for an add-on create a new file `tests/integration/features/<name-of-addon>.feature`.
+As a starting point for its content you can use `example.feature` which shows basic structure of an integration test for example add-on.
+In its most minimalistic form feature should contain 6 key parts which secures that tested add-on can be installed, applied, removed and uninstalled:
+
+- installation of addon: `executing "minishift addons install ../../add-ons/<name-of-addon>" succeeds`
+- start of Minishift: `executing "minishift start" succeeds`
+- application of add-on: `executing "minishift addons apply <name-of-addon>" succeeds`
+- removal of add-on: `executing "minishift addons remove <name-of-addon>" succeeds`
+- add-on uninstallation: `executing "minishift addons uninstall <name-of-addon>" succeeds`
+- deletion of Minishift instance: `executing "minishift delete --force" succeeds`
+
+[[advanced-steps]]
+=== Advanced Steps
+To cover functionality of an add-on in more advanced manner you can use various step definitions which are provided by Minishift testsuite, for example:
+
+- evaluation of Minishift commands: `stdout of command "minishift ssh -- docker ps" contains "my-container"`
+- execution of `oc` commands: `executing "oc login --username=developer --password=developer" succeeds`
+- checks for OpenShift console being accessible: `"status code" of HTTP request to "/console" of OpenShift instance is equal to "200"`
+- checks if HTTP endpoint of an application is accessible and contains expected data: `"body" of HTTP request to "/" of service "ruby-ex" in namespace "ruby" contains "Welcome to your Ruby application on OpenShift"`
+
+To see more information about all provided step definitions check its implementation at Minishift's link:https://github.com/minishift/minishift/tree/master/test/integration/testsuite[testsuite package].

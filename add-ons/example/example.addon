@@ -1,0 +1,9 @@
+# Name: example
+# Description: Shows basic functionality of an add-on
+
+# Application of the add-on
+# several commands can be used: echo, sleep, ssh, docker, oc, openshift
+echo Setting up an example add-on
+
+# Addon successfully applied
+echo Example add-on successfully applied

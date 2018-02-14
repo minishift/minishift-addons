@@ -1,0 +1,8 @@
+# Name: Example
+# Description: Removes example add-on
+
+# Removing the add-on
+echo Removing example add-on 
+
+# Removed
+echo Example add-on successfully removed  
