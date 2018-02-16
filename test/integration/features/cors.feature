@@ -3,6 +3,7 @@ Feature: Cors add-on
   As Minishift user I can install and apply Cors add-on from minishift-addons repository.
 
   Scenario: Installing the add-on
+    Given stdout of command "minishift addons list" does not contain "cors"
      When executing "minishift addons install ../../add-ons/cors" succeeds
      Then stdout should contain "Addon 'cors' installed"
 
