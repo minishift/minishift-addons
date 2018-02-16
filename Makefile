@@ -15,7 +15,10 @@
 # Setting up paths
 REPOPATH ?= github.com/minishift/minishift-addons
 TEST_DIR ?= $(CURDIR)/testing
-INTEGRATION_TEST_DIR = $(TEST_DIR)/integration-test
+
+GOOS ?= $(shell go env GOOS)
+GOARCH ?= $(shell go env GOARCH)
+ORG := github.com/minishift
 
 # Platfrom dependency
 ifeq ($(GOOS),windows)
@@ -27,13 +30,23 @@ TIMEOUT ?= 3600s
 MINISHIFT_BINARY ?= $(TEST_DIR)/bin/minishift$(IS_EXE)
 
 # Make target definitions
+default:
+	@echo "Nothing to make. Run 'make integration' to run integration tests."
+
 .PHONY: integration
 integration: ADDON ?= ""
+integration: vendor
 integration:
-	mkdir -p $(INTEGRATION_TEST_DIR)
-	go test -timeout $(TIMEOUT) $(REPOPATH)/test/integration --tags=integration -v -args --test-dir $(INTEGRATION_TEST_DIR) --binary $(MINISHIFT_BINARY) \
+	mkdir -p $(TEST_DIR)/integration-test
+	go test -timeout $(TIMEOUT) $(REPOPATH)/test/integration --tags=integration -v -args --test-dir $(TEST_DIR)/integration-test --binary $(MINISHIFT_BINARY) \
 	--run-before-feature="$(RUN_BEFORE_FEATURE)" --test-with-specified-shell="$(TEST_WITH_SPECIFIED_SHELL)" --tags=$(ADDON) $(GODOG_OPTS)
 
 .PHONY: vendor
 vendor:
 	dep ensure -v
+
+.PHONY: clean
+clean:
+	rm -rf $(TEST_DIR)/integration-test $(TEST_DIR)/test-results
+	rm -rf  vendor	
+	rm -rf $(GOPATH)/pkg/$(GOOS)_$(GOARCH)/$(ORG)
