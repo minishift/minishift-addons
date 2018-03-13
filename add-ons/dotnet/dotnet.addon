@@ -1,0 +1,8 @@
+# Name: dotnet
+# Description: ImageStreams and Templates for developing and deploying application using .NET Core
+
+oc create --namespace openshift -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/dotnet_imagestreams.json
+oc create --namespace openshift -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/templates/dotnet-example.json 
+oc create --namespace openshift -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/templates/dotnet-runtime-example.json 
+oc create --namespace openshift -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/templates/dotnet-pgsql-persistent.json
+

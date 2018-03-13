@@ -1,15 +1,14 @@
 # Eclipse Che Addon
 
-This addon create Eclipse Che templates, image streams and a project running Che in Minishift. In short this helps in setting up Eclipse Che 
-on Minishift inline with [Deploy Che on Minishift](https://www.eclipse.org/che/docs/setup/openshift/index.html#deploy-che-on-minishift)
+This addon create Eclipse Che templates, image streams and a project running Che in Minishift. In short this helps in setting up Eclipse Che
+on Minishift inline with [Deploy Che on Minishift](https://www.eclipse.org/che/docs/6/che/docs/openshift-single-user.html)
 
 <!-- MarkdownTOC -->
 
 - [Using the Eclipse Che Add-on](#using-the-eclipse-che-add-on)
-	- [Install add-on](#install-add-on)
 	- [Start Minishift](#start-minishift)
+	- [Install add-on](#install-add-on)
 	- [Apply add-on](#apply-add-on)
-	- [Replace Che stacks](#replace-stacks)
 	- [Remove add-on](#remove-add-on)
 	- [Uninstall add-on](#uninstall-add-on)
 
@@ -24,22 +23,6 @@ Eclipse Che provides a complete cloud IDE.
 
 The best way of using this add-on is via the [`minishift add-ons apply`](https://docs.openshift.org/latest/minishift/command-ref/minishift_addons_apply.html) command which is outlined in the following paragraphs.
 
-<a name="install-add-on"></a>
-### Install add-on
-Che default stacks require root privilege to run sshd. Without root privilege, workspaces will take more time to timeout and start.
-One workaround would be to enable the `anyuid` addon. Another way would be to [replace the existing stacks](#replace-stacks) with the ones without the `sshd` agent.
-
-    $ minishift addons install --defaults
-    $ minishift addons enable anyuid
-
-Clone this repository onto your local machine and then install the add-on via:
-
-    $ minishift addons install <path_to_directory_containing_this_readme>
-    $ minishift addons enable che
-
-
-`enable` will setup Eclipse Che when you start Minishift the next time.
-
 <a name="start-minishift"></a>
 ### Start Minishift
 
@@ -50,36 +33,88 @@ Start Minishift using something like this:
 However, as default memory is set to 2GB and a che-server takes about 700MB memory and a default stack workspace can reach 2GB,
 we recommand to start Minishift with at least 5GB:
 
-    $ minishift start --memory=5GB 
+    $ minishift start --memory=5GB
+
+<a name="install-add-on"></a>
+### Install add-on
+Clone this repository onto your local machine and then install the add-on via:
+
+    $ minishift addons install <path_to_directory_containing_this_readme>
+    $ minishift addons enable che
+
+
+`enable` will setup Eclipse Che when you start Minishift the next time.
 
 <a name="apply-add-on"></a>
 ### Apply add-on
 If Minishift is already started and che addon is installed. It is possible to deploy che without restarting Minishift:
 
+#### Deploy Che
 
-    $ minishift addons apply che
+```bash
+$ minishift addons apply che
+```
 
+#### Deploy a custom che-server image
 
-<a name="replace-stacks"></a>
-### Replace Che stacks
-Once Che is up and running,
+To deploy a custom che-server image (e.g. `eclipse/che-server:local`):
 
-    $ STACKS_SCRIPT_URL=https://raw.githubusercontent.com/eclipse/che/master/dockerfiles/init/modules/openshift/files/scripts/replace_stacks.sh
-    $ curl -fsSL ${STACKS_SCRIPT_URL} -o ./stacks-che.sh
-    $ oc project mini-che && bash ./stacks-che.sh
+```bash
+$ minishift addons apply --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:local che
+```
 
+To deploy latest Che 5.22.1 use:
+
+```bash
+$ minishift addons apply --addon-env CHE_DOCKER_IMAGE=eclipse/che-server:5.22.1 che
+```
+
+If the image is local, aka is not pushed to a cloud registry, this image should be
+present inside of minishift VM. For example:
+
+```bash
+$ eval $(minishift docker-env)
+$ docker build . -t eclipse/che-server:local
+```
+
+#### Use a custom OpenShift token
+
+If you need to customize OpenShift token that is used by Che to access OpenShift API:
+
+```bash
+$ minishift addons apply --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) che
+```
+
+You can use some specific token instead of using `$(oc whoami -t)` to get token of current user.
+
+#### Addon Variables
+
+To customize the deployment of the Che server, the following variables can be applied to the execution:
+
+|Name|Description|Default Value|
+|----|-----------|-------------|
+|`NAMESPACE`|The OpenShift project where Che service will be deployed|`che-mini`|
+|`CHE_DOCKER_IMAGE`|The docker image to be used for che.|`eclipse/che-server:latest`|
+|`GITHUB_CLIENT_ID`|GitHub client ID to be used in Che workspaces|`changeme`|
+|`GITHUB_CLIENT_SECRET`|GitHub client secred to be used in Che workspaces|`changeme`|
+|`OPENSHIFT_TOKEN`|For Che v6 only. The token to create workspace resources (pods, services, routes, etc...)|`changeme`|
+
+Variables can be specified by adding `--addon-env <key=value>` when the addon is being invoked (either by `minishift start` or `minishift addons apply`).
 
 <a name="remove-add-on"></a>
 ### Remove add-on
 To remove all created template and che project:
 
-
-    $ minishift addons remove che
+    $ minishift addons remove \
+        --addon-env OPENSHIFT_TOKEN="" \
+        --addon-env CHE_DOCKER_IMAGE="" \
+        --addon-env GITHUB_CLIENT_ID="" \
+        --addon-env GITHUB_CLIENT_SECRET="" \
+        --addon-env NAMESPACE=mini-che che
 
 <a name="uninstall-add-on"></a>
 ### Uninstall add-on
 To uninstall the addon from the addon list:
-
 
     $ minishift addons uninstall che
 

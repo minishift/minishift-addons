@@ -1,14 +1,14 @@
 # Name: che
 # Description: Remove add on
 # Url: https://www.eclipse.org/che/docs/setup/openshift/index.html
+# Required-Vars: NAMESPACE
+# Var-Defaults: NAMESPACE=mini-che
 
-echo [CHE] Removing Image Stream
-oc delete -f streams/che-server-streams.json -n openshift
-
-echo [CHE] Removing Che server Template 
+echo [CHE] Removing Che server Template
 oc delete -f templates/che-single-user.yml -n openshift
 
-echo [CHE] Removing mini-che project
-oc delete project mini-che
+echo [CHE] Removing #{NAMESPACE} project
+oc delete project #{NAMESPACE}
+oc adm policy remove-role-from-user system:image-builder developer -n openshift
 
-echo Eclipse Che addon removed  
+echo Eclipse Che addon removed

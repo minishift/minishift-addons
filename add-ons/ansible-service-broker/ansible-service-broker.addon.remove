@@ -1,14 +1,27 @@
 # Name: ansible-service-broker
 # Description: Removes the Ansible Service Broker
-# Required-vars:
+# OpenShift-Version: >=3.7.0
+# Required-Vars: BROKER_REPO_TAG, APBTOOLS_REPO_TAG
+# Var-Defaults: BROKER_REPO_TAG=ansible-service-broker-1.1.8-1, APBTOOLS_REPO_TAG=apb-1.1.6-1
 
-# Delete cluster resources
-oc delete clusterrolebinding asb
 oc delete clusterrolebinding asb-auth-bind
+oc delete clusterrolebinding asb
 oc delete clusterrolebinding ansibleservicebroker-client
+
 oc delete clusterrole asb-auth
 oc delete clusterrole access-asb-role
-oc delete broker ansible-service-broker
 
-# Delete ansible-service-broker project
+oc delete clusterservicebroker ansible-service-broker
+
 oc delete project ansible-service-broker
+
+oc delete clusterrolebinding apbtool-relist
+oc delete clusterrole apbtool-relist
+
+oc delete clusterrolebinding apbtool-system-registry
+oc delete clusterrolebinding apbtool-system-image-builder
+
+oc delete -n openshift rolebinding apbtool-openshift-admin
+
+oc delete -n ansible-service-broker -f https://raw.githubusercontent.com/openshift/ansible-service-broker/#{BROKER_REPO_TAG}/templates/deploy-ansible-service-broker.template.yaml
+oc delete -n ansible-service-broker -f https://raw.githubusercontent.com/ansibleplaybookbundle/ansible-playbook-bundle/#{APBTOOLS_REPO_TAG}/templates/openshift-permissions.template.yaml
