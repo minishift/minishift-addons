@@ -60,6 +60,13 @@ $ minishift addons --enable <addon-name>
 
 For more information about enabling, disabling, and applying add-ons, see the link:https://docs.openshift.org/latest/minishift/using/addons.html[Add-ons] topic in the Minishift documentation.
 
+[[ci-setup]]
+== CI Setup
+
+`minishift-addons` uses link:https://ci.centos.org/[CentOS CI] as CI build server.
+link:https://ci.centos.org/job/minishift-addons-nightly-b2d/[Nightly job] runs daily at midnight.
+It execute all available add-on link:https://github.com/minishift/minishift-addons/tree/master/test/integration/features[integration tests] against the _master_ branch of the `minishift-addons` GitHub repository with link:https://github.com/minishift/minishift-b2d-iso[b2d ISO].
+
 [[contact-community]]
 == Contact the Minishift community
 
