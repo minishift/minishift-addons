@@ -23,6 +23,6 @@ Feature: Example feature for example.addon
      Then stdout should contain "Add-on 'example' uninstalled"
       And stdout of command "minishift addons list" does not contain "example"
 
-  Scenario: Deleting Minishift
+  Scenario: Deleting Minishift test
     When executing "minishift delete --force" succeeds
     Then Minishift should have state "Does Not Exist"
