@@ -7,7 +7,7 @@ Feature: Cors add-on
      When executing "minishift addons install ../../add-ons/cors" succeeds
      Then stdout should contain "Addon 'cors' installed"
 
-  Scenario: Minishift starts
+  Scenario: Minishift starts test
     Given Minishift has state "Does Not Exist"
      When executing "minishift start" succeeds
      Then Minishift should have state "Running"
