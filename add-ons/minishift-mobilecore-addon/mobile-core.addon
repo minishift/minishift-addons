@@ -1,0 +1,47 @@
+# Name: minishift-mobilecore-addon                                                                          
+# Description: Allows authenticated users to run images under a non pre-allocated UID   
+# Var-Defaults: DOCKERHUB_USERNAME=USERNAME,DOCKERHUB_PASSWORD=PASSWORD,DOCKERHUB_ORG=aerogearcatalog, VER=v9.3.0,CORE_REPO=aerogear,CORE_BRANCH=master
+# OpenShift-Version: >=3.7.0
+
+ssh tce-load -wi bash.tcz
+ssh tce-load -wi coreutils.tcz
+
+ssh curl -s https://nodejs.org/dist/#{VER}/node-#{VER}-linux-x64.tar.gz > ~/#{VER}.tar.gz
+ssh cd /usr/local && sudo /usr/local/bin/tar --strip-components=1 -xzf ~/#{VER}.tar.gz
+
+ssh sudo chmod -R a+rwx /var/lib/minishift/openshift.local.config
+ssh curl -s -O -J -L https://github.com/openshift/origin/releases/download/v3.7.0/openshift-origin-client-tools-v3.7.0-7ed6862-linux-64bit.tar.gz
+ssh tar -xf openshift-origin-client-tools-v3.7.0-7ed6862-linux-64bit.tar.gz && sudo cp openshift-origin-client-tools-v3.7.0-7ed6862-linux-64bit/oc /usr/bin/oc
+ssh mkdir ~/.kube
+ssh cp /var/lib/minishift/openshift.local.config/master/admin.kubeconfig ~/.kube/config
+ssh oc login -u system:admin
+
+oc login -u system:admin
+oc adm policy add-cluster-role-to-group system:openshift:templateservicebroker-client system:unauthenticated system:authenticated
+
+oc create -f https://raw.githubusercontent.com/aerogear/mobile-cli/master/artifacts/mobileclient_crd.yaml
+
+ssh oc get clusterrole admin -o yaml > /tmp/admin-clusterrole.yml
+ssh printf "- apiGroups:\n  - mobile.k8s.io\n  attributeRestrictions: null\n  resources:\n  - mobileclients\n  verbs:\n  - create\n  - delete\n  - get\n  - list\n  - patch\n  - update\n  - watch\n" >> /tmp/admin-clusterrole.yml
+ssh oc replace -f /tmp/admin-clusterrole.yml
+
+ssh oc get clusterrole edit -o yaml > /tmp/edit-clusterrole.yml
+ssh printf "- apiGroups:\n  - mobile.k8s.io\n  attributeRestrictions: null\n  resources:\n  - mobileclients\n  verbs:\n  - create\n  - delete\n  - get\n  - list\n  - patch\n  - update\n  - watch\n" >> /tmp/edit-clusterrole.yml
+ssh oc replace -f /tmp/edit-clusterrole.yml
+
+ssh git clone https://github.com/#{CORE_REPO}/mobile-core.git
+ssh cd ~/mobile-core && git checkout #{CORE_BRANCH}
+ssh cp -r ~/mobile-core/ui/* /var/lib/minishift/openshift.local.config
+echo Installing and starting MCP extension, this can take a while
+echo
+ssh bash /var/lib/minishift/openshift.local.config/install.sh
+ssh cd /var/lib/minishift/openshift.local.config/ && npm run grunt build
+docker restart origin
+ssh while [ $(yes | oc login -u system:admin | wc -l) -eq 0 ]; do sleep 2; done
+
+echo Installing Ansible Service Broker with Docker Org: #{DOCKERHUB_ORG}
+ssh bash ~/mobile-core/installer/roles/ansible-service-broker-setup/files/provision-ansible-service-broker.sh '#{DOCKERHUB_USERNAME}' '#{DOCKERHUB_PASSWORD}' '#{DOCKERHUB_ORG}' true latest #{ip} nip.io ansible-service-broker
+ssh while [ $(oc get pods -n ansible-service-broker | grep "asb-" | grep -v "deploy" | grep "Running" | wc -l) -eq 0 ]; do sleep 10; done
+
+echo mobile core successfully enabled
+echo
