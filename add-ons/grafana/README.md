@@ -19,6 +19,7 @@ $ minishift addon apply management-infra
 To deploy grafana do:
 
 ```
+$ minishift addon install grafana
 $ minishift addon apply grafana --addon-env namespace=grafana
 ```
 
