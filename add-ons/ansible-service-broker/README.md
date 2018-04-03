@@ -60,6 +60,9 @@ To customize the deployment of the Ansible Service Broker, the following variabl
 |`BROKER_REPO_TAG`|Tag used to specify the broker's template in the upstream asb repo|`ansible-service-broker-1.1.6-1`|
 |`APBTOOLS_REPO_TAG`|Tag used to specify the apb tooling permission template in the upstream apb repo|`apb-1.1.6-1`|
 |`DOCKERHUB_ORG`|Organization to query for Ansible Playbook Bundles in DockerHub|`ansibleplaybookbundle`|
+|`REGISTRY_TYPE`|Registry type for Ansible Playbook Bundles (e.g. dockerhub, rhcc)|`dockerhub`|
+|`REGISTRY_NAME`|Registry name to query for Ansible Playbook Bundles (e.g. dh, rh)|`dh`|
+|`REGISTRY_URL`|Registry URL for Ansible Playbook Bundles|`https://registry.hub.docker.com`|
 
 Variables can be specified by adding `--addon-env <key=value>` when the addon is being invoked (`minishift start` or `minishift addons apply`)
 
