@@ -17,14 +17,14 @@
     "colors",
     "gherkin"
   ]
-  revision = "4dc98b0e2b130c3c9d06868a050320e5b310d3e7"
-  version = "v0.7.4"
+  revision = "0371765570d36374bef4ab9f62ed0491f0862a3c"
+  version = "v0.7.6"
 
 [[projects]]
   name = "github.com/Sirupsen/logrus"
   packages = ["."]
-  revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
-  version = "v1.0.4"
+  revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
+  version = "v1.0.5"
 
 [[projects]]
   name = "github.com/asaskevich/govalidator"
@@ -55,26 +55,12 @@
 [[projects]]
   name = "github.com/docker/machine"
   packages = [
-    "commands/mcndirs",
-    "drivers/none",
-    "libmachine/auth",
-    "libmachine/cert",
     "libmachine/drivers",
-    "libmachine/engine",
-    "libmachine/host",
     "libmachine/log",
-    "libmachine/mcndockerclient",
-    "libmachine/mcnerror",
     "libmachine/mcnflag",
     "libmachine/mcnutils",
-    "libmachine/provision",
-    "libmachine/provision/pkgaction",
-    "libmachine/provision/serviceaction",
     "libmachine/ssh",
     "libmachine/state",
-    "libmachine/swarm",
-    "libmachine/version",
-    "libmachine/versioncmp",
     "version"
   ]
   revision = "9ba6da9ebd1140b65eb73e1ce08086ca72764c60"
@@ -86,37 +72,36 @@
   revision = "aacba83f36a55ac31cbb71c06547a328c0cd1604"
 
 [[projects]]
-  name = "github.com/fsnotify/fsnotify"
+  name = "github.com/gbraad/go-hvkvp"
   packages = ["."]
-  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
-  version = "v1.4.7"
+  revision = "a692e030379b6de28a10b7697decdf8109899f6e"
+  version = "0.3"
+
+[[projects]]
+  name = "github.com/golang/glog"
+  packages = ["."]
+  revision = "335da9dda11408a34b64344f82e9c03779b71673"
+  source = "https://github.com/openshift/glog.git"
+
+[[projects]]
+  name = "github.com/gorillalabs/go-powershell"
+  packages = [
+    ".",
+    "backend",
+    "utils"
+  ]
+  revision = "3bc7a60b1df80a5766820c4a53d59668f4553f75"
 
 [[projects]]
   branch = "master"
-  name = "github.com/hashicorp/hcl"
-  packages = [
-    ".",
-    "hcl/ast",
-    "hcl/parser",
-    "hcl/scanner",
-    "hcl/strconv",
-    "hcl/token",
-    "json/parser",
-    "json/scanner",
-    "json/token"
-  ]
-  revision = "23c074d0eceb2b8a5bfdbb271ab780cde70f05a8"
+  name = "github.com/juju/errors"
+  packages = ["."]
+  revision = "c7d06af17c68cd34c835053720b21f6549d9b0ee"
 
 [[projects]]
   name = "github.com/kardianos/osext"
   packages = ["."]
   revision = "ae77be60afb1dcacde03767a8c37337fad28ac14"
-
-[[projects]]
-  name = "github.com/magiconair/properties"
-  packages = ["."]
-  revision = "d419a98cdbed11a922bf76f257b7c4be79b50e73"
-  version = "v1.7.4"
 
 [[projects]]
   branch = "master"
@@ -125,73 +110,27 @@
     "pkg/minikube/constants",
     "pkg/minishift/config",
     "pkg/minishift/constants",
-    "pkg/minishift/util",
+    "pkg/minishift/hostfolder/config",
+    "pkg/minishift/network",
+    "pkg/minishift/shell/powershell",
     "pkg/util",
     "pkg/util/cmd",
+    "pkg/util/filehelper",
     "pkg/util/os",
+    "pkg/util/os/atexit",
     "pkg/util/strings",
     "pkg/version",
     "test/integration/proxy",
     "test/integration/testsuite",
     "test/integration/util"
   ]
-  revision = "787e146c62d85f6acbc36242d2510de47d82ffaa"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/mitchellh/mapstructure"
-  packages = ["."]
-  revision = "a4e142e9c047c904fa2f1e144d9a84e6133024bc"
-
-[[projects]]
-  name = "github.com/pelletier/go-toml"
-  packages = ["."]
-  revision = "acdc4509485b587f5e675510c4f2c63e90ff68a8"
-  version = "v1.1.0"
+  revision = "0763284f96b0e3a2034389b8b8068792984adf9e"
 
 [[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/samalba/dockerclient"
-  packages = ["."]
-  revision = "a3036261847103270e9f732509f43b5f98710ace"
-
-[[projects]]
-  name = "github.com/spf13/afero"
-  packages = [
-    ".",
-    "mem"
-  ]
-  revision = "bb8f1927f2a9d3ab41c9340aa034f6b803f4359c"
-  version = "v1.0.2"
-
-[[projects]]
-  name = "github.com/spf13/cast"
-  packages = ["."]
-  revision = "acbeb36b902d72a7a4c18e8f3241075e7ab763e4"
-  version = "v1.1.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/spf13/jwalterweatherman"
-  packages = ["."]
-  revision = "7c0cea34c8ece3fbeb2b27ab9b59511d360fb394"
-
-[[projects]]
-  name = "github.com/spf13/pflag"
-  packages = ["."]
-  revision = "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
-  version = "v1.0.0"
-
-[[projects]]
-  name = "github.com/spf13/viper"
-  packages = ["."]
-  revision = "382f87b929b84ce13e9c8a375a4b217f224e6c65"
 
 [[projects]]
   name = "golang.org/x/crypto"
@@ -211,20 +150,7 @@
     "unix",
     "windows"
   ]
-  revision = "37707fdb30a5b38865cfb95e5aab41707daec7fd"
-
-[[projects]]
-  branch = "master"
-  name = "golang.org/x/text"
-  packages = [
-    "internal/gen",
-    "internal/triegen",
-    "internal/ucd",
-    "transform",
-    "unicode/cldr",
-    "unicode/norm"
-  ]
-  revision = "e19ae1496984b1c655b8044a65c0300a3c878dd3"
+  revision = "b126b21c05a91c856b027c16779c12e3bf236954"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
@@ -234,6 +160,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ea1769a0b5fe1d4f5bff332c45da4d37654e2637260f77e29197c9986452e35f"
+  inputs-digest = "d209bdee5f8b1657772ff0d088877bb5de9d42fc0c2c8caf5d9659f3789b1bc4"
   solver-name = "gps-cdcl"
   solver-version = 1

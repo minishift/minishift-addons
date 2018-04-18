@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/minishift/minishift-addons/test/integration/che"
+
 	"github.com/DATA-DOG/godog"
 	"github.com/minishift/minishift/test/integration/testsuite"
 )
@@ -35,6 +37,7 @@ func TestMain(m *testing.M) {
 func getFeatureContext(s *godog.Suite) {
 	// loads step definitions from the Minishift integration testsuite
 	testsuite.FeatureContext(s)
+	che.FeatureContext(s)
 	// loads additional step definitions for minishift-addons
 	// mypackage.FeatureContext(s)
 }
