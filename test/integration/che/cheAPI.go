@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package util
+package che
 
 import (
 	"bytes"
@@ -178,26 +178,24 @@ var sampleConfigMap map[string]Sample
 
 //doRequest does an new request with type requestType on url with data
 func doRequest(requestType, url, data string) ([]byte, int, error) {
-
 	client := http.Client{
 		Timeout: time.Second * 60,
 	}
 
 	req, err := http.NewRequest(requestType, url, bytes.NewBufferString(data))
 	req.Header.Set("Content-Type", "application/json")
-
 	if err != nil {
 		return []byte{}, -1, err
 	}
 
-	res, doErr := client.Do(req)
-	if doErr != nil {
-		return nil, res.StatusCode, doErr
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, res.StatusCode, err
 	}
 
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		return nil, res.StatusCode, readErr
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, res.StatusCode, err
 	}
 
 	return body, res.StatusCode, nil
@@ -206,26 +204,22 @@ func doRequest(requestType, url, data string) ([]byte, int, error) {
 
 //GetExecLogs takes in the Process ID of the process you would like to get the logs for
 func (c *CheAPI) GetExecLogs(Pid int) (LogArray, error) {
-	execLogsJSON, _, reqErr := doRequest(http.MethodGet, c.ExecAgentURL+"/"+strconv.Itoa(Pid)+"/logs", "")
-
-	if reqErr != nil {
-		return LogArray{}, reqErr
+	execLogsJSON, _, err := doRequest(http.MethodGet, c.ExecAgentURL+"/"+strconv.Itoa(Pid)+"/logs", "")
+	if err != nil {
+		return LogArray{}, err
 	}
 
 	var execLogData LogArray
-	jsonErr := json.Unmarshal(execLogsJSON, &execLogData)
-	if jsonErr != nil {
-		return execLogData, jsonErr
-	}
+	err = json.Unmarshal(execLogsJSON, &execLogData)
 
-	return execLogData, nil
+	return execLogData, err
 }
 
 //isLongLivedProcess takes in the Process ID of the process you would like to check if its long running
 func (c *CheAPI) isLongLivedProcess(Pid int) (bool, error) {
-	lastLogData, execErr := c.GetLastLog(Pid)
-	if execErr != nil {
-		return false, execErr
+	lastLogData, err := c.GetLastLog(Pid)
+	if err != nil {
+		return false, err
 	}
 
 	commandExitCode, err := c.GetCommandExitCode(Pid)
@@ -237,11 +231,9 @@ func (c *CheAPI) isLongLivedProcess(Pid int) (bool, error) {
 	time.Sleep(15 * time.Second)
 
 	for equalsLastLogCount != 3 && commandExitCode.ExitCode == -1 {
-
-		newLastLogData, execErr := c.GetLastLog(Pid)
-
-		if execErr != nil {
-			return false, nil
+		newLastLogData, err := c.GetLastLog(Pid)
+		if err != nil {
+			return false, err
 		}
 
 		if newLastLogData.Kind == lastLogData.Kind && newLastLogData.Text == lastLogData.Text && newLastLogData.Time == lastLogData.Time {
@@ -260,15 +252,13 @@ func (c *CheAPI) isLongLivedProcess(Pid int) (bool, error) {
 	}
 
 	return false, nil
-
 }
 
 //GetLastLog takes in the Process ID of the process you would like to get the logs for
 func (c *CheAPI) GetLastLog(Pid int) (LogItem, error) {
-	execLogData, execErr := c.GetExecLogs(Pid)
-
-	if execErr != nil {
-		return LogItem{}, execErr
+	execLogData, err := c.GetExecLogs(Pid)
+	if err != nil {
+		return LogItem{}, err
 	}
 
 	if len(execLogData) > 1 {
@@ -280,44 +270,38 @@ func (c *CheAPI) GetLastLog(Pid int) (LogItem, error) {
 
 //GetCommandExitCode takes in the Process ID of the process you would like to get the Process data for
 func (c *CheAPI) GetCommandExitCode(Pid int) (ProcessStruct, error) {
-	commandExitCodeJSON, _, reqErr := doRequest(http.MethodGet, c.ExecAgentURL+"/"+strconv.Itoa(Pid), "")
-
-	if reqErr != nil {
-		return ProcessStruct{}, reqErr
+	commandExitCodeJSON, _, err := doRequest(http.MethodGet, c.ExecAgentURL+"/"+strconv.Itoa(Pid), "")
+	if err != nil {
+		return ProcessStruct{}, err
 	}
 
 	var processInfo ProcessStruct
-	jsonErr := json.Unmarshal(commandExitCodeJSON, &processInfo)
-	if jsonErr != nil {
-		return processInfo, jsonErr
-	}
+	err = json.Unmarshal(commandExitCodeJSON, &processInfo)
 
-	return processInfo, nil
+	return processInfo, err
 }
 
 //PostCommandToWorkspace creates and runs sampleCommand using the Exec Agent
 func (c *CheAPI) PostCommandToWorkspace(sampleCommand Command) (int, error) {
-	sampleCommandMarshalled, marshalErr := json.MarshalIndent(sampleCommand, "", "    ")
-
-	if marshalErr != nil {
-		return -1, marshalErr
+	sampleCommandMarshalled, err := json.MarshalIndent(sampleCommand, "", "    ")
+	if err != nil {
+		return -1, err
 	}
 
-	processJSON, _, reqErr := doRequest(http.MethodPost, c.ExecAgentURL, string(sampleCommandMarshalled))
-
-	if reqErr != nil {
-		return -1, reqErr
+	processJSON, _, err := doRequest(http.MethodPost, c.ExecAgentURL, string(sampleCommandMarshalled))
+	if err != nil {
+		return -1, err
 	}
 
 	var processData ProcessStruct
-	unmarshalErr := json.Unmarshal(processJSON, &processData)
-	if unmarshalErr != nil {
-		return -1, unmarshalErr
+	err = json.Unmarshal(processJSON, &processData)
+	if err != nil {
+		return -1, err
 	}
 
-	longLived, longLivedErr := c.isLongLivedProcess(processData.Pid)
-	if longLivedErr != nil {
-		return -1, longLivedErr
+	longLived, err := c.isLongLivedProcess(processData.Pid)
+	if err != nil {
+		return -1, err
 	}
 
 	if longLived {
@@ -331,54 +315,45 @@ func (c *CheAPI) PostCommandToWorkspace(sampleCommand Command) (int, error) {
 
 //AddSamplesToProject adds an array of samples to the workspace using WS Agent
 func (c *CheAPI) AddSamplesToProject(sample []Sample) error {
-
-	marshalled, marshallErr := json.MarshalIndent(sample, "", "    ")
-
-	if marshallErr != nil {
-		return marshallErr
+	marshalled, err := json.MarshalIndent(sample, "", "    ")
+	if err != nil {
+		return err
 	}
 
-	_, _, reqErr := doRequest(http.MethodPost, c.WSAgentURL+"/project/batch", string(marshalled))
+	_, _, err = doRequest(http.MethodPost, c.WSAgentURL+"/project/batch", string(marshalled))
 
-	if reqErr != nil {
-		return reqErr
-	}
-
-	return nil
+	return err
 }
 
 //GetNumberOfProjects gets the number of projects in a workspace
 func (c *CheAPI) GetNumberOfProjects() (int, error) {
-
-	projectData, _, reqErr := doRequest(http.MethodGet, c.WSAgentURL+"/project", "")
-
-	if reqErr != nil {
-		return -1, reqErr
+	projectData, _, err := doRequest(http.MethodGet, c.WSAgentURL+"/project", "")
+	if err != nil {
+		return -1, err
 	}
 
 	var data []Sample
-	jsonErr := json.Unmarshal(projectData, &data)
-	if jsonErr != nil {
-		return -1, jsonErr
+	err = json.Unmarshal(projectData, &data)
+	if err != nil {
+		return -1, err
 	}
 
 	return len(data), nil
 }
 
 //BlockWorkspace blocks the given workspaceID until it has started
-func (c *CheAPI) BlockWorkspace(workspaceID, untilStatus1, untilStatus2 string) error {
-	workspaceStatus, statusErr := c.GetWorkspaceStatusByID(workspaceID)
-
-	if statusErr != nil {
-		return statusErr
-	}
-
-	for workspaceStatus.WorkspaceStatus == untilStatus1 || workspaceStatus.WorkspaceStatus == untilStatus2 {
-		time.Sleep(30 * time.Second)
-		workspaceStatus, statusErr = c.GetWorkspaceStatusByID(workspaceID)
-		if statusErr != nil {
-			return statusErr
+func (c *CheAPI) BlockWorkspace(workspaceID, untilStatus string) error {
+	for {
+		workspaceStatus, err := c.GetWorkspaceStatusByID(workspaceID)
+		if err != nil {
+			return err
 		}
+
+		if workspaceStatus.WorkspaceStatus == untilStatus {
+			break
+		}
+
+		time.Sleep(5 * time.Second)
 	}
 
 	return nil
@@ -386,12 +361,10 @@ func (c *CheAPI) BlockWorkspace(workspaceID, untilStatus1, untilStatus2 string) 
 
 //GetHTTPAgents gets the Exec Agent and WSAgent from a Che5 or Che6 workspace
 func (c *CheAPI) GetHTTPAgents(workspaceID string) (Agent, error) {
-
 	//Now we need to get the workspace installers and then unmarshall
-	runtimeData, _, reqErr := doRequest(http.MethodGet, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
-
-	if reqErr != nil {
-		return Agent{}, reqErr
+	runtimeData, _, err := doRequest(http.MethodGet, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
+	if err != nil {
+		return Agent{}, err
 	}
 
 	var Che5Runtime Che5RuntimeStruct
@@ -401,7 +374,6 @@ func (c *CheAPI) GetHTTPAgents(workspaceID string) (Agent, error) {
 	json.Unmarshal(runtimeData, &Che6Runtime) //Not checking for unmarshalling errors because we don't know whether its che5 or che6 running
 
 	var agents Agent
-
 	for index := range Che5Runtime.Runtime.Machines {
 		for _, server := range Che5Runtime.Runtime.Machines[index].Runtime.Servers {
 
@@ -434,59 +406,50 @@ func (c *CheAPI) GetHTTPAgents(workspaceID string) (Agent, error) {
 
 //StartWorkspace POSTs a Workspace configuration to the workspace endpoint, creating a new workspace
 func (c *CheAPI) StartWorkspace(workspaceConfiguration interface{}, stackID string) (Workspace2, error) {
-
 	a := Post{Environments: workspaceConfiguration, Namespace: "che", Name: stackID + "-stack-test", DefaultEnv: "default"}
-	marshalled, marshallErr := json.MarshalIndent(a, "", "    ")
-
-	if marshallErr != nil {
-		return Workspace2{}, marshallErr
+	marshalled, err := json.MarshalIndent(a, "", "    ")
+	if err != nil {
+		return Workspace2{}, err
 	}
 
 	//Get rid of bayesian when you're testing on RH-Che stacks
 	re := regexp.MustCompile(",[\\n|\\s]*\"com.redhat.bayesian.lsp\"")
 	noBayesian := re.ReplaceAllString(string(marshalled), "")
 
-	workspaceDataJSON, _, reqErr := doRequest(http.MethodPost, c.CheAPIEndpoint+"/workspace?start-after-create=true", noBayesian)
-
-	if reqErr != nil {
-		return Workspace2{}, reqErr
+	workspaceDataJSON, _, err := doRequest(http.MethodPost, c.CheAPIEndpoint+"/workspace?start-after-create=true", noBayesian)
+	if err != nil {
+		return Workspace2{}, err
 	}
 
 	var WorkspaceResponse Workspace2
-	unmarshallErr := json.Unmarshal(workspaceDataJSON, &WorkspaceResponse)
-	if unmarshallErr != nil {
-		return Workspace2{}, unmarshallErr
+	err = json.Unmarshal(workspaceDataJSON, &WorkspaceResponse)
+	if err != nil {
+		return Workspace2{}, err
 	}
 
-	c.BlockWorkspace(WorkspaceResponse.ID, "STARTING", "")
+	c.BlockWorkspace(WorkspaceResponse.ID, "RUNNING")
 
 	return WorkspaceResponse, nil
 }
 
 //GetWorkspaceStatusByID gets the workspace status of the given workspaceID
 func (c *CheAPI) GetWorkspaceStatusByID(workspaceID string) (WorkspaceStatus, error) {
-
-	workspaceDataJSON, _, reqErr := doRequest(http.MethodGet, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
-
-	if reqErr != nil {
-		return WorkspaceStatus{}, reqErr
+	workspaceDataJSON, _, err := doRequest(http.MethodGet, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
+	if err != nil {
+		return WorkspaceStatus{}, err
 	}
 
 	var workspaceStatusObj WorkspaceStatus
-	unmarshallErr := json.Unmarshal(workspaceDataJSON, &workspaceStatusObj)
-	if unmarshallErr != nil {
-		return workspaceStatusObj, unmarshallErr
-	}
+	err = json.Unmarshal(workspaceDataJSON, &workspaceStatusObj)
 
-	return workspaceStatusObj, nil
+	return workspaceStatusObj, err
 }
 
 //CheckWorkspaceDeletion checks if the workspace at workspaceID is deleted
 func (c *CheAPI) CheckWorkspaceDeletion(workspaceID string) error {
-	_, statusCode, reqErr := doRequest(http.MethodGet, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
-
-	if reqErr != nil {
-		return reqErr
+	_, statusCode, err := doRequest(http.MethodGet, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
+	if err != nil {
+		return err
 	}
 
 	if statusCode != 404 {
@@ -498,23 +461,21 @@ func (c *CheAPI) CheckWorkspaceDeletion(workspaceID string) error {
 
 //StopWorkspace stops the workspace with workspaceID
 func (c *CheAPI) StopWorkspace(workspaceID string) error {
-	_, _, reqErr := doRequest(http.MethodDelete, c.CheAPIEndpoint+"/workspace/"+workspaceID+"/runtime", "")
-
-	if reqErr != nil {
-		return reqErr
+	_, _, err := doRequest(http.MethodDelete, c.CheAPIEndpoint+"/workspace/"+workspaceID+"/runtime", "")
+	if err != nil {
+		return err
 	}
 
-	c.BlockWorkspace(workspaceID, "SNAPSHOTTING", "STOPPING")
+	c.BlockWorkspace(workspaceID, "STOPPED")
 
 	return nil
 }
 
 //RemoveWorkspace removes the workspace with workspaceID
 func (c *CheAPI) RemoveWorkspace(workspaceID string) error {
-	_, _, reqErr := doRequest(http.MethodDelete, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
-
-	if reqErr != nil {
-		return reqErr
+	_, _, err := doRequest(http.MethodDelete, c.CheAPIEndpoint+"/workspace/"+workspaceID, "")
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -522,21 +483,20 @@ func (c *CheAPI) RemoveWorkspace(workspaceID string) error {
 
 //GetStackInformation gets the stack information
 func (c *CheAPI) GetStackInformation() ([]Workspace, error) {
-	stackData, _, reqErr := doRequest(http.MethodGet, c.CheAPIEndpoint+"/stack", "")
-
-	if reqErr != nil {
-		return []Workspace{}, reqErr
+	stackData, _, err := doRequest(http.MethodGet, c.CheAPIEndpoint+"/stack?maxItems=200", "")
+	if err != nil {
+		return []Workspace{}, err
 	}
 
 	var workspaceData []Workspace
-	jsonStackErr := json.Unmarshal(stackData, &workspaceData)
-	if jsonStackErr != nil {
-		return workspaceData, jsonStackErr
+	err = json.Unmarshal(stackData, &workspaceData)
+	if err != nil {
+		return workspaceData, err
 	}
 
-	for ind, workspace := range workspaceData {
+	for i, workspace := range workspaceData {
 		if len(workspace.Config.Commands) > 0 {
-			workspaceData[ind].Command = append(workspace.Command, workspace.Config.Commands...)
+			workspaceData[i].Command = append(workspace.Command, workspace.Config.Commands...)
 		}
 	}
 
@@ -545,19 +505,15 @@ func (c *CheAPI) GetStackInformation() ([]Workspace, error) {
 
 //GetSamplesInformation gets the samples information
 func (c *CheAPI) GetSamplesInformation() ([]Sample, error) {
-	samplesJSON, _, reqErr := doRequest(http.MethodGet, samples, "")
-
-	if reqErr != nil {
-		return []Sample{}, reqErr
+	samplesJSON, _, err := doRequest(http.MethodGet, samples, "")
+	if err != nil {
+		return []Sample{}, err
 	}
 
 	var sampleData []Sample
-	jsonSamplesErr := json.Unmarshal([]byte(samplesJSON), &sampleData)
-	if jsonSamplesErr != nil {
-		return sampleData, jsonSamplesErr
-	}
+	err = json.Unmarshal([]byte(samplesJSON), &sampleData)
 
-	return sampleData, nil
+	return sampleData, err
 }
 
 //GenerateDataForWorkspaces generates a map of workspaces with the stack name as the key and a map of samples with the project url as the key

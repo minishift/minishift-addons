@@ -16,42 +16,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package integration
+package che
 
 import (
 	"fmt"
 	"strings"
-	"time"
 
-	"github.com/minishift/minishift/test/integration/util"
+	"github.com/minishift/minishift/test/integration/testsuite"
 )
 
-type CheRunner struct {
-	runner util.CheAPI
-}
-
-func (c *CheRunner) weTryToGetTheCheApiEndpoint() error {
-
-	err := minishift.executingOcCommand("project mini-che")
-
+func applyingCheWithOpenshiftTokenSucceeds() error {
+	err := testsuite.MinishiftInstance.ExecutingOcCommand("whoami -t")
 	if err != nil {
 		return err
 	}
 
-	err2 := minishift.executingOcCommand("get routes --template='{{range .items}}{{.spec.host}}{{end}}'")
+	token := testsuite.GetLastCommandOutput().StdOut
+	err = testsuite.MinishiftInstance.ExecutingMinishiftCommand("addons apply --addon-env OPENSHIFT_TOKEN=" + token + " che")
 
-	if err2 != nil {
+	return err
+}
+
+func (c *CheRunner) weTryToGetTheCheApiEndpoint() error {
+	err := testsuite.MinishiftInstance.ExecutingOcCommand("get routes -n mini-che --template='{{range .items}}{{.spec.host}}{{end}}'")
+	if err != nil {
 		return err
 	}
-	if len(commandOutputs) > 0 {
-		endpoint := strings.Replace(commandOutputs[len(commandOutputs)-1].StdOut, "'", "", -1)
 
-		if c.runner.CheAPIEndpoint == "" {
-			time.Sleep(3 * time.Minute)
-		}
-
-		c.runner.CheAPIEndpoint = "http://" + endpoint + "/api"
+	commandOutput := testsuite.GetLastCommandOutput()
+	if commandOutput.ExitCode != 0 || commandOutput.StdErr != "" {
+		return fmt.Errorf("Getting route to che service failed. Exit-code: %s, StdErr: %s", commandOutput.ExitCode, commandOutput.StdErr)
 	}
+
+	endpoint := strings.Replace(commandOutput.StdOut, "'", "", -1)
+	if endpoint == "" {
+		return fmt.Errorf("Route to che is empty.")
+	}
+
+	c.runner.CheAPIEndpoint = "http://" + endpoint + "/api"
 
 	return nil
 }
@@ -60,37 +62,19 @@ func (c *CheRunner) cheApiEndpointShouldNotBeEmpty() error {
 	if c.runner.CheAPIEndpoint == "" {
 		return fmt.Errorf("Could not detect Eclipse Che Api Endpoint")
 	}
-	return nil
-}
-
-func (minishift *Minishift) applyingOpenshiftTokenSucceeds() error {
-	err := minishift.executingOcCommand("whoami -t")
-
-	if err != nil {
-		return err
-	}
-
-	minishiftErr := minishift.executingMinishiftCommand("addons apply --addon-env OPENSHIFT_TOKEN=" + commandOutputs[len(commandOutputs)-1].StdOut + " che")
-
-	if minishiftErr != nil {
-		return minishiftErr
-	}
 
 	return nil
 }
 
 func (c *CheRunner) weTryToGetTheStacksInformation() error {
-
-	workspaces, stackErr := c.runner.GetStackInformation()
-
-	if stackErr != nil {
-		return stackErr
+	workspaces, err := c.runner.GetStackInformation()
+	if err != nil {
+		return err
 	}
 
-	samples, samplesErr := c.runner.GetSamplesInformation()
-
-	if samplesErr != nil {
-		return samplesErr
+	samples, err := c.runner.GetSamplesInformation()
+	if err != nil {
+		return err
 	}
 
 	c.runner.GenerateDataForWorkspaces(workspaces, samples)
@@ -102,11 +86,16 @@ func (c *CheRunner) theStacksShouldNotBeEmpty() error {
 	if len(c.runner.GetStackConfigMap()) == 0 || len(c.runner.GetSamplesConfigMap()) == 0 {
 		return fmt.Errorf("Could not retrieve samples")
 	}
+
 	return nil
 }
 
-func (c *CheRunner) startingAWorkspaceWithStackSucceeds(stackName string) error {
-	stackStartEnvironment := c.runner.GetStackConfigMap()[stackName]
+func (c *CheRunner) startingWorkspaceWithStackSucceeds(stackName string) error {
+	stackStartEnvironment, present := c.runner.GetStackConfigMap()[stackName]
+	if present == false {
+		return fmt.Errorf("Could not retrieve '%s' stack information.", stackName)
+	}
+
 	workspace, err := c.runner.StartWorkspace(stackStartEnvironment.Config.EnvironmentConfig, stackStartEnvironment.ID)
 	if err != nil {
 		return err
@@ -139,11 +128,8 @@ func (c *CheRunner) workspaceShouldHaveState(expectedState string) error {
 
 func (c *CheRunner) importingTheSampleProjectSucceeds(projectURL string) error {
 	sample := c.runner.GetSamplesConfigMap()[projectURL]
-	err := c.runner.AddSamplesToProject([]util.Sample{sample})
-	if err != nil {
-		return err
-	}
-	return nil
+
+	return c.runner.AddSamplesToProject([]Sample{sample})
 }
 
 func (c *CheRunner) workspaceShouldHaveProject(numOfProjects int) error {
@@ -185,31 +171,18 @@ func (c *CheRunner) exitCodeShouldBe(code int) error {
 	if c.runner.PID != code {
 		return fmt.Errorf("return command was not 0")
 	}
+
 	return nil
 }
 
-func (c *CheRunner) userStopsWorkspace() error {
-	err := c.runner.StopWorkspace(c.runner.WorkspaceID)
-	if err != nil {
-		return err
-	}
-	return nil
+func (c *CheRunner) stoppingWorkspaceSucceeds() error {
+	return c.runner.StopWorkspace(c.runner.WorkspaceID)
 }
 
 func (c *CheRunner) workspaceIsRemoved() error {
-	err := c.runner.RemoveWorkspace(c.runner.WorkspaceID)
-	if err != nil {
-		return err
-	}
-	return nil
+	return c.runner.RemoveWorkspace(c.runner.WorkspaceID)
 }
 
 func (c *CheRunner) workspaceRemovalShouldBeSuccessful() error {
-
-	err := c.runner.CheckWorkspaceDeletion(c.runner.WorkspaceID)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return c.runner.CheckWorkspaceDeletion(c.runner.WorkspaceID)
 }

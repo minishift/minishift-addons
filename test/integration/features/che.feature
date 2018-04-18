@@ -1,40 +1,58 @@
-@addon-che @addon
+@che
 Feature: Che add-on
   Che addon starts Eclipse Che
-  
-  Scenario: User enables the che add-on
-    Given executing "minishift addons install --defaults" succeeds 
+
+  @minishift-only
+  Scenario: Installing che add-on
+    Given executing "minishift addons install --defaults" succeeds
     And executing "minishift addons enable anyuid" succeeds
     When file from "https://raw.githubusercontent.com/minishift/minishift-addons/master/add-ons/che/rb/che-admin-rb.json" is downloaded into location "download/che/rb"
     And file from "https://raw.githubusercontent.com/minishift/minishift-addons/master/add-ons/che/templates/che-single-user.yml" is downloaded into location "download/che/templates"
     And file from "https://raw.githubusercontent.com/minishift/minishift-addons/master/add-ons/che/che.addon" is downloaded into location "download/che"
-    And executing "minishift addons install ../../out/integration-test/download/che" succeeds
+    Then executing "minishift addons install ../../testing/integration-test/download/che" succeeds
+
+  Scenario: Che add-on is installed
+    When executing "minishift addons list" succeeds
+    Then stdout should contain "che"
   
   Scenario: User starts Minishift
     Given Minishift has state "Does Not Exist"
     When executing "minishift start --memory=5GB" succeeds
     Then Minishift should have state "Running"
-    When applying openshift token succeeds
-    Then executing "minishift addons list" succeeds
-    And stdout should contain "che"
 
-  Scenario Outline: User starts workspace, imports projects, checks run commands
+  Scenario: Applying Che add-on
+    When applying che addon with openshift token succeeds
+    Then stdout should contain "Please wait while the pods all startup!"
+
+  Scenario: Che is ready
     Given Minishift has state "Running"
+    When executing "oc project mini-che" succeeds
+    Then service "che" rollout successfully within "300" seconds
+
+  Scenario: Che API is accessible
     When we try to get the che api endpoint
     Then che api endpoint should not be empty
+
+  Scenario: Che stacks are accessible
     When we try to get the stacks information
     Then the stacks should not be empty
+
+  Scenario Outline: User starts workspace, imports projects, checks run commands
     When starting a workspace with stack "<stack>" succeeds
     Then workspace should have state "RUNNING"
+
     When importing the sample project "<sample>" succeeds
     Then workspace should have 1 project
+
     When user runs command on sample "<sample>"
     Then exit code should be 0
-    When user stops workspace
+
+    When stopping a workspace succeeds
     Then workspace should have state "STOPPED"
+
     When workspace is removed
     Then workspace removal should be successful
-    
+
     Examples:
     | stack                 | sample                                                                   |
     | Eclipse Vert.x        | https://github.com/openshiftio-vertx-boosters/vertx-http-booster         |
@@ -44,7 +62,7 @@ Feature: Che add-on
     | Python                | https://github.com/che-samples/console-python3-simple.git                |
     | PHP                   | https://github.com/che-samples/web-php-simple.git                        |
     | C++                   | https://github.com/che-samples/console-cpp-simple.git                    |
-  
+
   Scenario: User deletes Minishift
      When executing "minishift delete --force" succeeds
      Then Minishift should have state "Does Not Exist"
