@@ -6,8 +6,13 @@ is an Open Service Broker designed to deploy [Ansible Playbook Bundles](https://
 
 # Prerequisites
 
+**IMPORTANT:** The --service-catalog option has been removed from minishift as of
+version `v1.16.0`. Therefore, this addon is only compatible with minishift `<= v1.15.1` (unless you have a manually installed Service Catalog).
+Support beyond `v1.16.0` is currently on the roadmap.
+
 This addon is designed for an RBAC enabled OpenShift cluster of `>=3.7`. Minishift can be configured to
 deploy 3.7 with the following command:
+
 
 ```
 $ minishift config set openshift-version v3.7.1
