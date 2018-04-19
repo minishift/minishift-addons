@@ -1,8 +1,8 @@
 # Name: ansible-service-broker
 # Description: Deploys the Ansible Service Broker
-# OpenShift-Version: >=3.7.0
+# OpenShift-Version: >=3.9.0
 # Required-Vars: BROKER_REPO_TAG, APBTOOLS_REPO_TAG, DOCKERHUB_ORG
-# Var-Defaults: BROKER_REPO_TAG=ansible-service-broker-1.1.8-1, APBTOOLS_REPO_TAG=apb-1.1.6-1, DOCKERHUB_ORG=ansibleplaybookbundle
+# Var-Defaults: BROKER_REPO_TAG=ansible-service-broker-1.2.9-1, APBTOOLS_REPO_TAG=release-1.1, DOCKERHUB_ORG=ansibleplaybookbundle
 
 # Create ansible-service-broker project
 oc new-project ansible-service-broker
@@ -11,15 +11,8 @@ oc new-project ansible-service-broker
 oc create -n ansible-service-broker -f https://raw.githubusercontent.com/openshift/ansible-service-broker/#{BROKER_REPO_TAG}/templates/deploy-ansible-service-broker.template.yaml
 oc create -n ansible-service-broker -f https://raw.githubusercontent.com/ansibleplaybookbundle/ansible-playbook-bundle/#{APBTOOLS_REPO_TAG}/templates/openshift-permissions.template.yaml
 
-# Instantiate Template
-## Wrap in Docker Exec
-## First Handle Varaiables and set sensible defaults
-## Instantiate Template
-docker exec origin /bin/bash -c $'yum install -y openssl'
-docker exec origin /bin/bash -c $'mkdir -p /tmp/etcd-cert'
-docker exec origin /bin/bash -c $'openssl req -nodes -x509 -newkey rsa:4096 -keyout /tmp/etcd-cert/key.pem -out /tmp/etcd-cert/cert.pem -days 365 -subj "/CN=asb-etcd.ansible-service-broker.svc"'
-docker exec origin /bin/bash -c $'openssl genrsa -out /tmp/etcd-cert/MyClient1.key 2048 && openssl req -new -key /tmp/etcd-cert/MyClient1.key -out /tmp/etcd-cert/MyClient1.csr -subj "/CN=client" && openssl x509 -req -in /tmp/etcd-cert/MyClient1.csr -CA /tmp/etcd-cert/cert.pem -CAkey /tmp/etcd-cert/key.pem -CAcreateserial -out /tmp/etcd-cert/MyClient1.pem -days 1024'
-docker exec origin /bin/bash -c $'oc process ansible-service-broker -n ansible-service-broker -p DOCKERHUB_ORG=#{DOCKERHUB_ORG} -p ROUTING_SUFFIX=#{routing-suffix} -p ETCD_TRUSTED_CA_FILE=/var/run/etcd-auth-secret/ca.crt -p BROKER_CLIENT_CERT_PATH=/var/run/asb-etcd-auth/client.crt -p BROKER_CLIENT_KEY_PATH=/var/run/asb-etcd-auth/client.key -p ETCD_TRUSTED_CA="$(base64 /tmp/etcd-cert/cert.pem)" -p BROKER_CLIENT_CERT="$(base64 /tmp/etcd-cert/MyClient1.pem)" -p BROKER_CLIENT_KEY="$(base64 /tmp/etcd-cert/MyClient1.key)" -p BROKER_CA_CERT=$(oc get secret -n kube-service-catalog -o go-template=\'{{ range .items }}{{ if eq .type \"kubernetes.io/service-account-token\" }}{{ index .data \"service-ca.crt\" }}{{end}}{{\"\\n\"}}{{end}}\' | tail -n 1) | oc create -n ansible-service-broker -f-'
+## Instantiate Template, wrap in docker execs
+docker exec origin /bin/bash -c $'oc process ansible-service-broker -n ansible-service-broker -p BROKER_IMAGE=ansibleplaybookbundle/origin-ansible-service-broker:#{BROKER_REPO_TAG} -p DOCKERHUB_ORG=#{DOCKERHUB_ORG} -p ROUTING_SUFFIX=#{routing-suffix} -p BROKER_CA_CERT=$(oc get secret -n kube-service-catalog -o go-template=\'{{ range .items }}{{ if eq .type \"kubernetes.io/service-account-token\" }}{{ index .data \"service-ca.crt\" }}{{end}}{{\"\\n\"}}{{end}}\' | tail -n 1) | oc create -n ansible-service-broker -f-'
 docker exec origin /bin/bash -c $'oc process apbtools-permission -n ansible-service-broker | oc create -f-'
 
 echo Ansible Service Broker Deployed

@@ -6,14 +6,18 @@ is an Open Service Broker designed to deploy [Ansible Playbook Bundles](https://
 
 # Prerequisites
 
-This addon is designed for an RBAC enabled OpenShift cluster of `>=3.7`. Minishift can be configured to
-deploy 3.7 with the following command:
+This addon is designed for an RBAC enabled OpenShift cluster of `>=3.9`. Minishift can be configured to
+deploy 3.9 with the following command:
 
 ```
-$ minishift config set openshift-version v3.7.1
+$ minishift config set openshift-version v3.9.0
 ```
 
 Minishift must be deployed with the Service Catalog enabled
+
+**NOTE**: Prior to minishift `v1.16.1`, minishift was installed with the Service
+Catalog in a different way. These instructions are for minishift `>=v1.16.1`,
+and it is strongly recommended that this version or greater is used.
 
 The Service Catalog can be deployed by adding the `--service-catalog` when starting Minishift. The ability to pass extra flags during startup can be enabled by setting the _MINISHIFT_ENABLE_EXPERIMENTAL_ environmental variable as follows:
 
@@ -30,10 +34,10 @@ $ minishift config set iso-url centos
 
 Note: CentOS ISO is required for Fedora, CentOS, or RHEL hosts due to a [known issue](https://docs.openshift.org/latest/minishift/troubleshooting/troubleshooting-misc.html#authentication-required-to-push-image) between the host's docker client and the default boot2docker iso.
 
-Start Minishift with the `--service-catalog` flag
+Start Minishift with the `--service-catalog` extra flag. See the [OpenShift documentation](https://docs.openshift.org/latest/minishift/using/experimental-features.html#enabling-experimental-oc-flags) for more info on `--extra-cluster-up` flags.
 
 ```
-$ minishift start --service-catalog
+minishift start --extra-clusterup-flags "--service-catalog"
 ```
 
 
