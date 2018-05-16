@@ -1,0 +1,20 @@
+# Name: eap-cd
+# Description: Imports EAP CD templates
+# Url: https://github.com/jboss-container-images/jboss-eap-7-openshift-image/tree/eap-cd/templates
+
+oc create -f templates/eap-cd-amq-persistent-s2i.json -n openshift
+oc create -f templates/eap-cd-amq-s2i.json -n openshift
+oc create -f templates/eap-cd-basic-s2i.json -n openshift
+oc create -f templates/eap-cd-https-s2i.json -n openshift
+oc create -f templates/eap-cd-image-stream.json -n openshift
+oc create -f templates/eap-cd-mongodb-persistent-s2i.json -n openshift
+oc create -f templates/eap-cd-mongodb-s2i.json -n openshift
+oc create -f templates/eap-cd-mysql-persistent-s2i.json -n openshift
+oc create -f templates/eap-cd-mysql-s2i.json -n openshift
+oc create -f templates/eap-cd-postgresql-persistent-s2i.json -n openshift
+oc create -f templates/eap-cd-postgresql-s2i.json -n openshift
+oc create -f templates/eap-cd-sso-s2i.json -n openshift
+oc create -f templates/eap-cd-third-party-db-s2i.json -n openshift
+oc create -f templates/eap-cd-tx-recovery-s2i.json -n openshift
+
+echo EAP CD imagestreams and templates installed
