@@ -124,7 +124,7 @@
     "test/integration/testsuite",
     "test/integration/util"
   ]
-  revision = "0763284f96b0e3a2034389b8b8068792984adf9e"
+  revision = "19273147b51952fad8baa8b6ffea36ef8b76d590"
 
 [[projects]]
   name = "github.com/pkg/errors"
