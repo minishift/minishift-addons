@@ -38,9 +38,9 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^applying che addon with openshift token succeeds$`, applyingCheWithOpenshiftTokenSucceeds)
 
 	// steps for testing che addon
-	s.Step(`^we try to get the che api endpoint$`, cheAPIRunner.weTryToGetTheCheApiEndpoint)
+	s.Step(`^user tries to get the che api endpoint$`, cheAPIRunner.weTryToGetTheCheApiEndpoint)
 	s.Step(`^che api endpoint should not be empty$`, cheAPIRunner.cheApiEndpointShouldNotBeEmpty)
-	s.Step(`^we try to get the stacks information$`, cheAPIRunner.weTryToGetTheStacksInformation)
+	s.Step(`^user tries to get the stacks information$`, cheAPIRunner.weTryToGetTheStacksInformation)
 	s.Step(`^the stacks should not be empty$`, cheAPIRunner.theStacksShouldNotBeEmpty)
 	s.Step(`^starting a workspace with stack "([^"]*)" succeeds$`, cheAPIRunner.startingWorkspaceWithStackSucceeds)
 	s.Step(`^workspace should have state "([^"]*)"$`, cheAPIRunner.workspaceShouldHaveState)

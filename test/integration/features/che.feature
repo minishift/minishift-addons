@@ -3,13 +3,9 @@ Feature: Che add-on
   Che addon starts Eclipse Che
 
   @minishift-only
-  Scenario: Installing che add-on
-    Given executing "minishift addons install --defaults" succeeds
-    And executing "minishift addons enable anyuid" succeeds
-    When file from "https://raw.githubusercontent.com/minishift/minishift-addons/master/add-ons/che/rb/che-admin-rb.json" is downloaded into location "download/che/rb"
-    And file from "https://raw.githubusercontent.com/minishift/minishift-addons/master/add-ons/che/templates/che-single-user.yml" is downloaded into location "download/che/templates"
-    And file from "https://raw.githubusercontent.com/minishift/minishift-addons/master/add-ons/che/che.addon" is downloaded into location "download/che"
-    Then executing "minishift addons install ../../testing/integration-test/download/che" succeeds
+  Scenario: User installs che add-on
+    When executing "minishift addons install ../../add-ons/che" succeeds
+    Then stdout should contain "Addon 'che' installed"
 
   Scenario: Che add-on is installed
     When executing "minishift addons list" succeeds
@@ -20,7 +16,7 @@ Feature: Che add-on
     When executing "minishift start --memory=5GB" succeeds
     Then Minishift should have state "Running"
 
-  Scenario: Applying Che add-on
+  Scenario: User applies Che add-on
     When applying che addon with openshift token succeeds
     Then stdout should contain "Please wait while the pods all startup!"
 
@@ -30,11 +26,11 @@ Feature: Che add-on
     Then service "che" rollout successfully within "300" seconds
 
   Scenario: Che API is accessible
-    When we try to get the che api endpoint
+    When user tries to get the che api endpoint
     Then che api endpoint should not be empty
 
   Scenario: Che stacks are accessible
-    When we try to get the stacks information
+    When user tries to get the stacks information
     Then the stacks should not be empty
 
   Scenario Outline: User starts workspace, imports projects, checks run commands
