@@ -1,0 +1,8 @@
+###################################################################################################
+# Name: fabric8-launcher
+# Description: removes  Fabric8 Launcher in a project named rhoarpad 
+# OpenShift-Version: >3.9.0       
+# Url: Template from https://raw.githubusercontent.com/fabric8-launcher/launcher-openshift-templates/master/openshift/launcher-template.yaml
+###################################################################################################
+
+oc delete project rhoarpad
