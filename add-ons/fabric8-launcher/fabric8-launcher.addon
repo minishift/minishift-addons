@@ -1,14 +1,14 @@
 ###################################################################################################
 # Name: fabric8-launcher
 # Description: Installs Fabric8 Launcher in a project named rhoarpad 
-# Required-Vars: GITHUB_USERNAME, GITHUB_TOKEN 
+# Required-Vars: GITHUB_USERNAME, GITHUB_TOKEN,OPENSHIFT_USERNAME,OPENSHIFT_PASSWORD 
 # OpenShift-Version: >3.9.0       
-# Var-Defaults: OPENSHIFT_USERNAME=developer,CONSOLE_URL=https://#{ip}:8443,LAUNCHER_PROJ=rhoarpad
+# Var-Defaults: OPENSHIFT_USERNAME=developer,OPENSHIFT_PASSWORD=developer,CONSOLE_URL=https://#{ip}:8443,LAUNCHER_PROJ=rhoarpad
 # Url: Template from https://raw.githubusercontent.com/fabric8-launcher/launcher-openshift-templates/master/openshift/launcher-template.yaml
 ###################################################################################################
 
 # login
-oc login -u #{OPENSHIFT_USERNAME} -p ' '
+oc login -u #{OPENSHIFT_USERNAME} -p #{OPENSHIFT_PASSWORD} 
 
 # create project
 oc new-project #{LAUNCHER_PROJ} 
