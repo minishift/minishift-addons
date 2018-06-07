@@ -463,7 +463,7 @@ objects:
                   key: github-client-secret
                   name: che
             - name: CHE_WORKSPACE_AUTO_START
-              value: "false"
+              value: "true"
             image: ${IMAGE_CHE_SERVER}
             imagePullPolicy: "IfNotPresent"
             livenessProbe:
