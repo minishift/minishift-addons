@@ -8,7 +8,11 @@ echo [CHE] Removing Che server Template
 oc delete -f templates/che-single-user.yml -n openshift
 
 echo [CHE] Removing #{NAMESPACE} project
+
+oc delete all -l app=che -n #{NAMESPACE}
+oc delete configmap che -n #{NAMESPACE}
+oc delete pvc che-data-volume claim-che-workspace  -n #{NAMESPACE}
+oc adm policy remove-role-from-user admin developer -n #{NAMESPACE}
 oc delete project #{NAMESPACE}
-oc adm policy remove-role-from-user system:image-builder developer -n openshift
 
 echo Eclipse Che addon removed
