@@ -2,7 +2,7 @@
 # Name: fabric8-launcher
 # Description: Installs Fabric8 Launcher in a project named rhoarpad 
 # Required-Vars: GITHUB_USERNAME, GITHUB_TOKEN,OPENSHIFT_USERNAME,OPENSHIFT_PASSWORD 
-# OpenShift-Version: >3.9.0       
+# OpenShift-Version: >=3.9.0 
 # Var-Defaults: OPENSHIFT_USERNAME=developer,OPENSHIFT_PASSWORD=developer,CONSOLE_URL=https://#{ip}:8443,LAUNCHER_PROJ=rhoarpad
 # Url: Template from https://raw.githubusercontent.com/fabric8-launcher/launcher-openshift-templates/master/openshift/launcher-template.yaml
 ###################################################################################################
@@ -17,4 +17,4 @@ oc new-project #{LAUNCHER_PROJ}
 oc create -n #{LAUNCHER_PROJ} -f https://raw.githubusercontent.com/fabric8-launcher/launcher-openshift-templates/master/openshift/launcher-template.yaml
 
 # instantiate launcher
-oc new-app fabric8-launcher --name=launcher -n #{LAUNCHER_PROJ} -p LAUNCHER_MISSIONCONTROL_GITHUB_USERNAME=#{GITHUB_USERNAME} -p LAUNCHER_MISSIONCONTROL_GITHUB_TOKEN=#{GITHUB_TOKEN} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_CONSOLE_URL=#{CONSOLE_URL} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_API_URL=#{CONSOLE_URL} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_USERNAME=#{OPENSHIFT_USERNAME} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_PASSWORD=#{OPENSHIFT_PASSWORD}  
+oc new-app fabric8-launcher --name=launcher -n #{LAUNCHER_PROJ} -p LAUNCHER_MISSIONCONTROL_GITHUB_USERNAME=#{GITHUB_USERNAME} -p LAUNCHER_MISSIONCONTROL_GITHUB_TOKEN=#{GITHUB_TOKEN} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_CONSOLE_URL=#{CONSOLE_URL} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_API_URL=#{CONSOLE_URL} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_USERNAME=#{OPENSHIFT_USERNAME} -p LAUNCHER_MISSIONCONTROL_OPENSHIFT_PASSWORD=#{OPENSHIFT_PASSWORD} -p LAUNCHER_KEYCLOAK_URL= -p LAUNCHER_KEYCLOAK_REALM=
