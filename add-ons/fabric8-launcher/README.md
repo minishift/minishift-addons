@@ -6,9 +6,20 @@ Verify you have installed these addons, by following the general [readme](https:
 
 As explained in the readme, clone the repository to get addons to your workstation.
 
+## Start Minishift
+
+Start minishift with additional memory allocation.
+
+```
+$ minishift start --memory=4GB
+```
+
+Depending on the number of boosters you plan on running, the memory allocated to minishift will vary and should be more than the 2GB default.
+
+
 ## Install Add-on
 
-Run the following command after you start minishift
+Run the following command after you start minishift.
 
 ```
 $ minishift addon install <path_to_directory_containing_this_readme>
