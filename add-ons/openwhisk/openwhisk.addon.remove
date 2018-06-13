@@ -1,0 +1,8 @@
+###################################################################################################
+# Name: openwhisk 
+# Description: removes openwhisk
+# Var-Defaults: OPENSHIFT_USERNAME=developer,CONSOLE_URL=https://#{ip}:8443,PROJECT_NAME=openwhisk
+# OpenShift-Version: >=3.9.0       
+###################################################################################################
+
+oc delete project #{PROJECT_NAME} 

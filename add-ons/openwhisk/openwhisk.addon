@@ -1,0 +1,27 @@
+###################################################################################################
+# Name: openwhisk 
+# Description: Installs OpenWhisk FaaS 
+# Required-Vars: OPENSHIFT_USERNAME
+# OpenShift-Version: >=3.9.0       
+# Var-Defaults: OPENSHIFT_USERNAME=developer,CONSOLE_URL=https://#{ip}:8443,PROJECT_NAME=openwhisk
+# Url: Template from https://git.io/openwhisk-template 
+###################################################################################################
+
+# login
+oc login -u admin -p admin 
+
+# create project
+oc new-project #{PROJECT_NAME} 
+
+# Create OpenWhisk template
+oc create -n #{PROJECT_NAME} -f https://git.io/openwhisk-template
+
+# Install OpenWhisk 
+oc new-app openwhisk-ephemeral -n #{PROJECT_NAME}
+
+# Assign OPENSHIFT_USERNAME as he administrator for the openwhisk project
+oc adm policy add-role-to-user admin #{OPENSHIFT_USERNAME} -n #{PROJECT_NAME}
+
+
+
+# wsk property set --auth $(oc get secret whisk.auth -o yaml | grep "system:" | awk '{print $2}' | base64 --decode) --apihost $(oc get route/openwhisk --template="{{.spec.host}}")
