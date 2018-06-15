@@ -1,7 +1,7 @@
 # Eclipse Che Addon
 
 This addon create Eclipse Che templates, image streams and a project running Che in Minishift. In short this helps in setting up Eclipse Che
-on Minishift inline with [Deploy Che on Minishift](https://www.eclipse.org/che/docs/6/che/docs/openshift-single-user.html)
+on Minishift inline with [Deploy Che on Minishift](https://www.eclipse.org/che/docs/openshift-single-user.html)
 
 <!-- MarkdownTOC -->
 

@@ -1,6 +1,6 @@
 # Name: che
 # Description: Setup and Configure Eclipse Che Template and Image Streams
-# Url: https://www.eclipse.org/che/docs/setup/openshift/index.html
+# Url: https://www.eclipse.org/che/docs/openshift-single-user.html
 # Required-Vars: NAMESPACE, CHE_DOCKER_IMAGE, OPENSHIFT_TOKEN, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 # Var-Defaults: NAMESPACE=mini-che, CHE_DOCKER_IMAGE=eclipse/che-server:latest, OPENSHIFT_TOKEN=NULL, GITHUB_CLIENT_ID=changeme, GITHUB_CLIENT_SECRET=changeme
 # OpenShift-Version: >=3.5.0
