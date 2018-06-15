@@ -1,6 +1,6 @@
 # Name: che
 # Description: Remove add on
-# Url: https://www.eclipse.org/che/docs/setup/openshift/index.html
+# Url: https://www.eclipse.org/che/docs/openshift-single-user.html
 # Required-Vars: NAMESPACE
 # Var-Defaults: NAMESPACE=mini-che
 
