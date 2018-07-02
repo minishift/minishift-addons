@@ -51,5 +51,5 @@ An [example](cluster-metrics-per-namespace.json) is provided in this folder. Whe
 Delete grafana with:
 
 ```
-$ oc delete oc delete project -n grafana --as=system:admin
+$ oc delete project -n grafana --as=system:admin
 ```
