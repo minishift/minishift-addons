@@ -1,0 +1,15 @@
+# Name: kubevirt
+# Description: Installs KubeVirt. For more information visit https://kubevirt.io
+# Required-Vars: KUBEVIRT_VERSION
+# Var-Defaults: KUBEVIRT_VERSION=v0.7.0-alpha.2
+# OpenShift-Version: >=3.9.0
+
+echo Deploying KubeVirt...
+
+oc adm policy add-scc-to-user privileged system:serviceaccount:kube-system:kubevirt-privileged
+oc adm policy add-scc-to-user privileged system:serviceaccount:kube-system:kubevirt-controller
+oc adm policy add-scc-to-user privileged system:serviceaccount:kube-system:kubevirt-infra
+oc apply -f https://github.com/kubevirt/kubevirt/releases/download/#{KUBEVIRT_VERSION}/kubevirt.yaml
+oc adm policy add-cluster-role-to-user kubevirt.io:edit developer
+
+echo Deployment applied, KubeVirt is starting up!
