@@ -4,8 +4,6 @@
 
 This add-on configures OpenShift to use HTPasswordIdentityProvider.  For more info on the Identity Providers refer to https://docs.openshift.org/3.9/install_config/configuring_authentication.html
 
-WARNING: This addon works only for CentOS based minishift instances
-
 == Add-on Variables
 
 The following list of variables can be used while configuring the add-on:
@@ -16,7 +14,7 @@ The following list of variables can be used while configuring the add-on:
 |Description
 |Default value
 
-|MINISHFIT_DATA_HOME
+|MINISHIFT_DATA_HOME
 |The minishift data directory within the vm instance
 |/var/lib/minishift
 
