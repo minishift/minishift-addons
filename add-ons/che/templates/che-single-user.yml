@@ -26,10 +26,6 @@ parameters:
     name: IMAGE_CHE_SERVER
     value: "eclipse/che-server:latest"
     required: false
-  - displayName: OpenShift OAuth Token
-    description: Token to get access to the OpenShift API
-    name: OPENSHIFT_OAUTH_TOKEN
-    value: ""
   - displayName: GitHub client ID
     description: GitHub client ID
     name: GITHUB_CLIENT_ID
@@ -143,9 +139,6 @@ objects:
       bootstrapper-binary-url: "http://che-${PROJECT_NAME}.${DOMAIN_NAME}/agent-binaries/linux_amd64/bootstrapper/bootstrapper"
       machine-start-timeout-min: "5"
       openshift-master-url: ""
-      openshift-oauth-token: "${OPENSHIFT_OAUTH_TOKEN}"
-      openshift-username: ""
-      openshift-password: ""
       openshift-project: "${PROJECT_NAME}"
       pvc-strategy: "unique"
       openshift-trust-certs: "false"
@@ -402,16 +395,6 @@ objects:
                 configMapKeyRef:
                   key: openshift-master-url
                   name: che
-            - name: CHE_INFRA_OPENSHIFT_OAUTH__TOKEN
-              valueFrom:
-                configMapKeyRef:
-                  key: openshift-oauth-token
-                  name: che
-            - name: CHE_INFRA_OPENSHIFT_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  key: openshift-password
-                  name: che
             - name: CHE_INFRA_OPENSHIFT_PROJECT
               valueFrom:
                 configMapKeyRef:
@@ -441,11 +424,6 @@ objects:
               valueFrom:
                 configMapKeyRef:
                   key: openshift-trust-certs
-                  name: che
-            - name: CHE_INFRA_OPENSHIFT_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  key: openshift-username
                   name: che
             - name: CHE_MULTIUSER
               valueFrom:

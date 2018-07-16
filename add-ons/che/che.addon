@@ -13,7 +13,7 @@ oc adm new-project #{NAMESPACE} --description="Eclipse Che on minishift"
 oc adm policy add-role-to-user admin developer -n #{NAMESPACE}
 
 echo [CHE] Deploying Che on minishift
-oc new-app --param IMAGE_CHE_SERVER=#{CHE_DOCKER_IMAGE} --param PROJECT_NAME=#{NAMESPACE} --param DOMAIN_NAME=#{ip}.nip.io --param OPENSHIFT_OAUTH_TOKEN=#{OPENSHIFT_TOKEN} --param GITHUB_CLIENT_ID=#{GITHUB_CLIENT_ID} --param GITHUB_CLIENT_SECRET=#{GITHUB_CLIENT_SECRET} che-single-user -n #{NAMESPACE} 
+oc new-app --param IMAGE_CHE_SERVER=#{CHE_DOCKER_IMAGE} --param PROJECT_NAME=#{NAMESPACE} --param DOMAIN_NAME=#{ip}.nip.io --param GITHUB_CLIENT_ID=#{GITHUB_CLIENT_ID} --param GITHUB_CLIENT_SECRET=#{GITHUB_CLIENT_SECRET} che-single-user -n #{NAMESPACE} 
 
 echo Please wait while the pods all startup!
 echo You can watch in the OpenShift console via:

@@ -77,16 +77,6 @@ $ eval $(minishift docker-env)
 $ docker build . -t eclipse/che-server:local
 ```
 
-#### Use a custom OpenShift token
-
-If you need to customize OpenShift token that is used by Che to access OpenShift API:
-
-```bash
-$ minishift addons apply --addon-env OPENSHIFT_TOKEN=$(oc whoami -t) che
-```
-
-You can use some specific token instead of using `$(oc whoami -t)` to get token of current user.
-
 #### Addon Variables
 
 To customize the deployment of the Che server, the following variables can be applied to the execution:
@@ -97,7 +87,6 @@ To customize the deployment of the Che server, the following variables can be ap
 |`CHE_DOCKER_IMAGE`|The docker image to be used for che.|`eclipse/che-server:latest`|
 |`GITHUB_CLIENT_ID`|GitHub client ID to be used in Che workspaces|`changeme`|
 |`GITHUB_CLIENT_SECRET`|GitHub client secred to be used in Che workspaces|`changeme`|
-|`OPENSHIFT_TOKEN`|For Che v6 only. The token to create workspace resources (pods, services, routes, etc...)|`changeme`|
 
 Variables can be specified by adding `--addon-env <key=value>` when the addon is being invoked (either by `minishift start` or `minishift addons apply`).
 

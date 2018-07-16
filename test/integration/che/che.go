@@ -25,14 +25,13 @@ import (
 	"github.com/minishift/minishift/test/integration/testsuite"
 )
 
-func applyingCheWithOpenshiftTokenSucceeds() error {
+func applyingCheSucceeds() error {
 	err := testsuite.MinishiftInstance.ExecutingOcCommand("whoami -t")
 	if err != nil {
 		return err
 	}
 
-	token := testsuite.GetLastCommandOutput().StdOut
-	err = testsuite.MinishiftInstance.ExecutingMinishiftCommand("addons apply --addon-env OPENSHIFT_TOKEN=" + token + " che")
+	err = testsuite.MinishiftInstance.ExecutingMinishiftCommand("addons apply che")
 
 	return err
 }

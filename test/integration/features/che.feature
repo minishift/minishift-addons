@@ -17,7 +17,7 @@ Feature: Che add-on
     Then Minishift should have state "Running"
 
   Scenario: User applies Che add-on
-    When applying che addon with openshift token succeeds
+    When applying che addon succeeds
     Then stdout should contain "Please wait while the pods all startup!"
 
   Scenario: Che is ready
