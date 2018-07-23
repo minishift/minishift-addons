@@ -3,6 +3,6 @@
 # Url: https://github.com/bucharest-gold/centos7-s2i-nodejs
 # Maintainer: Jorge Morales <jmorales@redhat.com>
 
-oc apply -f https://raw.githubusercontent.com/bucharest-gold/centos7-s2i-nodejs/master/imagestreams/nodejs-centos7.json -n openshift 
+oc apply -f https://raw.githubusercontent.com/openshift/library/master/community/nodejs/imagestreams/nodejs-centos7.json -n openshift 
 
 echo Imagestreams have been installed in the openshift project and are available to use
