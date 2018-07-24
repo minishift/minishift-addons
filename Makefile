@@ -17,9 +17,7 @@ REPOPATH ?= github.com/minishift/minishift-addons
 TEST_DIR ?= $(CURDIR)/testing
 BIN_DIR ?= $(TEST_DIR)/bin
 
-MINISHIFT_LATEST_URL=$(shell python test/utils/minishift_latest_version.py)
-ARCHIVE_FILE=$(shell echo $(MINISHIFT_LATEST_URL) | rev | cut -d/ -f1 | rev)
-MINISHIFT_UNTAR_DIR=$(shell echo $(ARCHIVE_FILE) | sed 's/.tgz//')
+MINISHIFT_LATEST_URL=http://artifacts.ci.centos.org/minishift/minishift/master/latest
 
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
@@ -51,16 +49,15 @@ vendor:
 	dep ensure -v
 
 $(BIN_DIR)/minishift:
-	@echo "Downloading latest minishift binary at $(BIN_DIR)/minishift..."
+	@echo "Downloading latest minishift binary at $(BIN_DIR)/minishift$(IS_EXE)..."
 	@mkdir -p $(BIN_DIR)
 	@cd $(BIN_DIR) && \
-	curl -LO --progress-bar $(MINISHIFT_LATEST_URL) && \
-	tar xzf $(ARCHIVE_FILE) && \
-	mv $(MINISHIFT_UNTAR_DIR)/minishift .
+	curl -LO --progress-bar $(MINISHIFT_LATEST_URL)/$(GOOS)-$(GOARCH)/minishift$(IS_EXE) && \
+	chmod 755 minishift$(IS_EXE)
 	@echo "Done."
 
 .PHONY: clean
 clean:
-	rm -rf $(TEST_DIR)/integration-test $(TEST_DIR)/test-results
+	rm -rf $(TEST_DIR)
 	rm -rf  vendor
 	rm -rf $(GOPATH)/pkg/$(GOOS)_$(GOARCH)/$(ORG)
