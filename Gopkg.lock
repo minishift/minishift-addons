@@ -21,12 +21,6 @@
   version = "v0.7.6"
 
 [[projects]]
-  name = "github.com/Sirupsen/logrus"
-  packages = ["."]
-  revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
-  version = "v1.0.5"
-
-[[projects]]
   name = "github.com/asaskevich/govalidator"
   packages = ["."]
   revision = "7b3beb6df3c42abd3509abfc3bcacc0fbfb7c877"
@@ -39,13 +33,13 @@
   version = "v3.5.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/docker/docker"
   packages = [
     "pkg/term",
     "pkg/term/windows"
   ]
-  revision = "092cba3727bb9b4a2f0e922cd6c0f93ea270e363"
-  version = "v1.13.1"
+  revision = "1ef1cc8388165b2b848f9b3f53ec91c87de09f63"
 
 [[projects]]
   name = "github.com/docker/go-units"
@@ -63,8 +57,8 @@
     "libmachine/state",
     "version"
   ]
-  revision = "9ba6da9ebd1140b65eb73e1ce08086ca72764c60"
-  version = "v0.13.0"
+  revision = "b48dc28d9139c93d166f07d8b3a049b59bceef9c"
+  version = "v0.15.0"
 
 [[projects]]
   name = "github.com/elazarl/goproxy"
@@ -82,21 +76,6 @@
   packages = ["."]
   revision = "335da9dda11408a34b64344f82e9c03779b71673"
   source = "https://github.com/openshift/glog.git"
-
-[[projects]]
-  name = "github.com/gorillalabs/go-powershell"
-  packages = [
-    ".",
-    "backend",
-    "utils"
-  ]
-  revision = "3bc7a60b1df80a5766820c4a53d59668f4553f75"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/juju/errors"
-  packages = ["."]
-  revision = "c7d06af17c68cd34c835053720b21f6549d9b0ee"
 
 [[projects]]
   name = "github.com/kardianos/osext"
@@ -124,13 +103,19 @@
     "test/integration/testsuite",
     "test/integration/util"
   ]
-  revision = "19273147b51952fad8baa8b6ffea36ef8b76d590"
+  revision = "e4d359a30b6a167a9b59842530f28016c44a7623"
 
 [[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
+
+[[projects]]
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  revision = "3e01752db0189b9157070a0e1668a620f9a85da2"
+  version = "v1.0.6"
 
 [[projects]]
   name = "golang.org/x/crypto"
@@ -150,7 +135,7 @@
     "unix",
     "windows"
   ]
-  revision = "b126b21c05a91c856b027c16779c12e3bf236954"
+  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
