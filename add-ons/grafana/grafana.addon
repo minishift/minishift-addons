@@ -4,7 +4,7 @@
 # Required-Vars: namespace 
 
 # TODO: Once conditional commands are there, create the namespace if it does not exist
-oc adm new-project #{namespace}
+#oc adm new-project #{namespace}
 oc new-app -f openshift-template-persistent.yml -n #{namespace}
 
 echo You have installed #{addon-name}
