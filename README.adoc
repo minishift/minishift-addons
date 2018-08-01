@@ -55,7 +55,7 @@ $ minishift addons apply <addon-name>
 - To enable the add-on to start each time that Minishift starts, run the following command:
 +
 ----
-$ minishift addons --enable <addon-name>
+$ minishift addons enable <addon-name>
 ----
 
 For more information about enabling, disabling, and applying add-ons, see the link:https://docs.openshift.org/latest/minishift/using/addons.html[Add-ons] topic in the Minishift documentation.
