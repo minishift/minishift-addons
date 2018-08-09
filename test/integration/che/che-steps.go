@@ -35,7 +35,7 @@ func FeatureContext(s *godog.Suite) {
 		runner: cheAPI,
 	}
 
-	s.Step(`^applying che addon with openshift token succeeds$`, applyingCheWithOpenshiftTokenSucceeds)
+	s.Step(`^applying che addon succeeds$`, applyingCheSucceeds)
 
 	// steps for testing che addon
 	s.Step(`^user tries to get the che api endpoint$`, cheAPIRunner.weTryToGetTheCheApiEndpoint)
