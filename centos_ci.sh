@@ -145,9 +145,9 @@ else
   # Navigate to the repo
   cd $GOPATH/src/github.com/minishift/minishift-addons
 
-  if [[ "$JOB_NAME" = "minishift-addons-nightly-b2d" ]]; then
-    perform_nightly "b2d"
+  if [[ "$JOB_NAME" = "minishift-addons-nightly-centos" ]]; then
+    perform_nightly "centos"
   elif [[ "$JOB_NAME" = "minishift-addons-pr" ]]; then
-    perform_pr "b2d"
+    perform_pr "centos"
   fi
 fi

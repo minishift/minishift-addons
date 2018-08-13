@@ -66,8 +66,8 @@ For more information about enabling, disabling, and applying add-ons, see the li
 `minishift-addons` uses link:https://ci.centos.org/[CentOS CI] as CI build server.
 A link:https://ci.centos.org/job/minishift-addons-pr/[pull request build job] will be triggered for every pull request.
 However, the build job runs the integration tests only when the pull request contains any change related to add-on.
-Also, a link:https://ci.centos.org/job/minishift-addons-nightly-b2d/[nightly job] runs daily at midnight.
-It execute all available add-on link:https://github.com/minishift/minishift-addons/tree/master/test/integration/features[integration tests] against the _master_ branch of the `minishift-addons` GitHub repository with link:https://github.com/minishift/minishift-b2d-iso[b2d ISO].
+Also, a link:https://ci.centos.org/job/minishift-addons-nightly-centos/[nightly job] runs daily at midnight.
+It execute all available add-on link:https://github.com/minishift/minishift-addons/tree/master/test/integration/features[integration tests] against the _master_ branch of the `minishift-addons` GitHub repository with link:https://github.com/minishift/minishift-centos-iso[CentOS ISO].
 
 [[contact-community]]
 == Contact the Minishift community
