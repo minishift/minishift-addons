@@ -4,7 +4,7 @@
 
 # oc adm policy add-scc-to-user anyuid system:serviceaccount:kube-dashboard:default
 oc adm new-project kube-dashboard
-oc create deploymentconfig dashboard --image=gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.3 -n kube-dashboard
+oc create deploymentconfig dashboard --image=gcr.io/google_containers/kubernetes-dashboard-amd64:v1.8.3 -n kube-dashboard
 oc label dc/dashboard app=kube-dashboard -n kube-dashboard
 oc set probe dc/dashboard --readiness --liveness --open-tcp=9090 --initial-delay-seconds=5 --timeout-seconds=1 -n kube-dashboard
 oc expose dc/dashboard --port=9090 -l app=kube-dashboard -n kube-dashboard
