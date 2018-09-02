@@ -1,0 +1,13 @@
+apiVersion: "istio.openshift.com/v1alpha1"
+kind: "Installation"
+metadata:
+  name: "istio-installation"
+spec:
+  jaeger:
+    elasticsearch_memory: 1Gi
+  kiali:
+    username: adminuser
+    password: admin
+    prefix: kiali/
+    version: v0.7.1
+  
