@@ -32,9 +32,9 @@ Configure minishift to deploy the centos iso:
 $ minishift config set iso-url centos
 ```
 
-Note: CentOS ISO is required for Fedora, CentOS, or RHEL hosts due to a [known issue](https://docs.openshift.org/latest/minishift/troubleshooting/troubleshooting-misc.html#authentication-required-to-push-image) between the host's docker client and the default boot2docker iso.
+Note: CentOS ISO is required for Fedora, CentOS, or RHEL hosts due to a [known issue](https://docs.okd.io/latest/minishift/troubleshooting/troubleshooting-misc.html#authentication-required-to-push-image) between the host's docker client and the default boot2docker iso.
 
-Start Minishift with the `--service-catalog` extra flag. See the [OpenShift documentation](https://docs.openshift.org/latest/minishift/using/experimental-features.html#enabling-experimental-oc-flags) for more info on `--extra-cluster-up` flags.
+Start Minishift with the `--service-catalog` extra flag. See the [OpenShift documentation](https://docs.okd.io/latest/minishift/using/experimental-features.html#enabling-experimental-oc-flags) for more info on `--extra-cluster-up` flags.
 
 ```
 minishift start --extra-clusterup-flags "--service-catalog"
@@ -43,7 +43,7 @@ minishift start --extra-clusterup-flags "--service-catalog"
 
 If you are planning on building or pushing to the minishift registry, be sure
 to configure your shell using `eval $(minishift docker-env)`. This configures your environment
-so that the apb tool can use the minishift registry. [See minishift documentation for more details](https://docs.openshift.org/latest/minishift/openshift/openshift-docker-registry.html).
+so that the apb tool can use the minishift registry. [See minishift documentation for more details](https://docs.okd.io/latest/minishift/openshift/openshift-docker-registry.html).
 
 # Deploy the Ansible Service Broker
 

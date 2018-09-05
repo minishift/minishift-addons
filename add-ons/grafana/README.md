@@ -23,7 +23,7 @@ $ minishift addon install grafana
 $ minishift addon apply grafana --addon-env namespace=grafana
 ```
 
-_NOTE_: namespace is a required environment variable for the add-on to run. Refer [addon-dynamic-variables](https://docs.openshift.org/latest/minishift/using/addons.html#addon-dynamic-variables) documentation.
+_NOTE_: namespace is a required environment variable for the add-on to run. Refer [addon-dynamic-variables](https://docs.okd.io/latest/minishift/using/addons.html#addon-dynamic-variables) documentation.
 
 ## Use grafana
 grafana will be available at:

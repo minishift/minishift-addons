@@ -4,8 +4,8 @@ This addon provides an easy way to install [Debezium](http://debezium.io/) on [M
 
 Prerequisites:
 
- * [Installed and running](https://docs.openshift.org/latest/minishift/getting-started/installing.html) Minishift
- * [Installed](https://docs.openshift.org/latest/minishift/command-ref/minishift_oc-env.html) OpenShift CLI
+ * [Installed and running](https://docs.okd.io/latest/minishift/getting-started/installing.html) Minishift
+ * [Installed](https://docs.okd.io/latest/minishift/command-ref/minishift_oc-env.html) OpenShift CLI
 
 ## Start Minishift
 The deployment works with Minishift default resources - 2 CPUs and 2 GB RAM. Nevertheless we prefer to allocate more memory (4 GB) available to Debezium and associated infrastructure. Start Minishift using following command to provide more RAM.
