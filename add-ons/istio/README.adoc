@@ -30,7 +30,7 @@ $ minishift start <7>
 <3> 3 CPUs results in a maximum of 30 pods, since Istio deploys approximately 9 pods at minimum
 <4> Istio 0.2.x and above requires OpenShift version 3.7.x or above
 <5> Enable Minishift `admin-user` add-on 
-<6> Enable the Minishift `anyuid` add-on.  For more details on OpenShift SCC, see link:https://docs.openshift.org/latest/admin_guide/manage_scc.html[Managing Security Context Constraints]
+<6> Enable the Minishift `anyuid` add-on.  For more details on OpenShift SCC, see link:https://docs.okd.io/latest/admin_guide/manage_scc.html[Managing Security Context Constraints]
 <7> Since we have set the profile to be **servicemesh**, this command starts Minishift with profile **servicemesh**
 
 == Preparing Istio 

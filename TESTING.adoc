@@ -27,7 +27,7 @@ We recommend aligning white space to the ends of the Gherkin keywords `Given`, `
 ====
 
 See the link:https://github.com/cucumber/cucumber/wiki/Gherkin[Gherkin wiki] for more information about Gherkin.
-More in-depth information about the Minishift integration test suite can be found in the link:https://docs.openshift.org/latest/minishift/contributing/developing.html#integration-tests[Developing Minishift] documentation.
+More in-depth information about the Minishift integration test suite can be found in the link:https://docs.okd.io/latest/minishift/contributing/developing.html#integration-tests[Developing Minishift] documentation.
 
 [[structure-of-tests]]
 === Structure of Tests
@@ -41,7 +41,7 @@ This file imports the test suite from the Minishift repository and can be used f
 == Prerequisites
 You must do the following to run the tests successfully:
 
-- Install link:https://docs.openshift.org/latest/minishift/getting-started/installing.html[Minishift and its prerequisites].
+- Install link:https://docs.okd.io/latest/minishift/getting-started/installing.html[Minishift and its prerequisites].
 - Install a recent link:https://golang.org/dl/[Go distribution] (>=1.8).
 - Install the link:https://github.com/golang/dep[dep package] with the following: `go get -u github.com/golang/dep/cmd/dep`
 - `git clone` this repository into *_$GOPATH/src/github.com/minishift/minishift-addons_*.

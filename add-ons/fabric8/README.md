@@ -17,7 +17,7 @@ Fabric8 provides a complete developer platform for creating projects, editing th
 <a name="using-the-fabric8-add-on"></a>
 ## Using the Fabric8 Add-on
 
-The best way of using this add-on is via the [`minishift add-ons apply`](https://docs.openshift.org/latest/minishift/command-ref/minishift_addons_apply.html) command which is outlined in the following paragraphs.
+The best way of using this add-on is via the [`minishift add-ons apply`](https://docs.okd.io/latest/minishift/command-ref/minishift_addons_apply.html) command which is outlined in the following paragraphs.
 
 <a name="install-add-on"></a>
 ### Install add-on
