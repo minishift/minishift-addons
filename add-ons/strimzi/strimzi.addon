@@ -1,0 +1,26 @@
+# Name: strimzi
+# Description: Deploys an Apache Kafka Cluster
+# Required-Vars: STRIMZI_VERSION
+# Var-Defaults: STRIMZI_VERSION=#{STRIMZI_VERSION},PROJECT=myproject
+# OpenShift-Version: >=3.10.0
+
+# Pull images
+echo Pulling images...
+docker pull docker.io/strimzi/topic-operator:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/entity-operator-stunnel:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/user-operator:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/cluster-operator:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/kafka:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/kafka-stunnel:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/kafka-init:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/zookeeper-stunnel:#{STRIMZI_VERSION}
+docker pull docker.io/strimzi/zookeeper:#{STRIMZI_VERSION}
+
+
+echo Applying Strimzi Install files (e.g. Roles, Bindings, CRDs)
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/#{STRIMZI_VERSION}/strimzi-cluster-operator-#{STRIMZI_VERSION}.yaml -n #{PROJECT}
+
+echo Creating persistent Strimzi broker
+oc apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/#{STRIMZI_VERSION}/examples/kafka/kafka-persistent.yaml -n #{PROJECT}
+
+echo Completed, wait for Strimzi start!
