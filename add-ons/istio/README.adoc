@@ -1,49 +1,51 @@
 :linkattrs:
+:experimental:
 
 = Istio Add-on
 
-This add-on deploys the https://Istio.io/[Istio] **servicemesh** on to Minishift-provisioned OpenShift cluster.
+This add-on deploys the https://Istio.io/[Istio] **servicemesh** on to Minishift-provisioned OpenShift cluster.  The Istio is provisioned using https://github.com/Maistra/openshift-ansible/blob/maistra-0.2.0/istio/Installation.md[Istio Operator].
 
-NOTE: The add-on was tested with Istio release v1.0.2
+[NOTE]
+====
+- The add-on was tested with Maistra (v0.2.0)
+- The add-on uses Istio Operator v0.2.0
+- This add-on depends on admin-user and anyuid  Minishift addons
+====
 
 == Minishift profile setup
 
-The standard Istio setup deploys around four to five applications like *istio-ingress*, *istio-egress*, *istio-pilot*, *grafana*, *prometheus* and their related resources
+As this Istio setup deploys applications like *istio-galley*,*istio-ingress*, *istio-egress*, *istio-pilot*,*elasticsearch*,*jaeger**,*kiali*, *grafana*, *prometheus* with their related resources
 such as https://kubernetes.io/docs/tasks/configure-pod-container/configmap/[configmaps], https://kubernetes.io/docs/concepts/configuration/secret/[secrets]
-and https://kubernetes.io/docs/concepts/api-extension/custom-resources/[Custom Resource Definitions].
+and https://kubernetes.io/docs/concepts/api-extension/custom-resources/[Custom Resource Definitions], it is ideal to setup a Minishift profile with the following configuration:
 
-Considering this, it is ideal to setup a Minishift profile with the following configuration:
-
-[code,sh]
+[sources,bash]
 ----
 $ minishift profile set servicemesh <1>
 $ minishift config set memory 8GB <2>
-$ minishift config set cpus 3 <3>
-$ minishift addon enable dynamic-admission-controllers #optional <4>
+$ minishift config set cpus 4 <3>
+$ minishift config set image-caching true <4>
+$ minishift config set openshift-version v3.1.0 <5>
+$ minishift addon enable dynamic-admission-controllers #optional <6>
 $ minishift addon enable istio
-$ minishift start servicemesh<5>
+$ minishift start servicemesh<7>
 ----
 
 <1> Create a new Minishift profile named **servicemesh**
 <2> Use 8GB of memory for Istio and apps that you might deploy later
-<3> 3 CPUs results in a maximum of 30 pods, since Istio deploys approximately 9 pods at minimum
-<4> Enable the Minishift `dynamic-admission-controllers` add-on if you want to use auto injection of side-car container.
-<5> Since we have set the profile to be **servicemesh**, this command starts Minishift with profile **servicemesh**
-
-== Preparing Istio
-Download Istio corresponding to your platform from https://github.com/istio/istio/releases[Download an Istio release] extract it to a folder of your choice
-and export that folder as `ISTIO_HOME`.
-
-On macOS/Linux machines you can use the following commands to download the latest version of Istio and set the `ISTIO_HOME` environment variable:
+<3> 4 CPUs results in a maximum of 30 pods, since Istio deploys approximately 9 pods at minimum
+<4> Caches the downloaded container images for future use
+<5> Pinning OpenShift version to v3.10.0, so that upgrade of minishift does not recreate the OpenShift cluster
+<6> Enable the Minishift `dynamic-admission-controllers` add-on if you want to use auto injection of side-car container.
+<7> Since we have set the profile to be **servicemesh**, this command starts Minishift with profile **servicemesh**
 
 == Install add-on
 
 Run the following command to install `istio` add-on:
 
-[code,sh]
+[source,bash]
 ----
 $ git clone https://github.com/minishift/minishift-addons
-$ minishift addon install ./minishift-addons/add-ons/dynamic-admissoin-controllers #optional
+$ minishift addon install ./minishift-addons/add-ons/dynamic-admission-controllers #optional
 $ minishift addon install ./minishift-addons/add-ons/istio
 ----
 
@@ -51,11 +53,12 @@ $ minishift addon install ./minishift-addons/add-ons/istio
 
 Run the following command to apply `istio` add-on:
 
-[code,sh]
+[source,bash]
 ----
 $ minishift addon apply dynamic-admission-controllers #optional
-$ minishift addon apply istio
+$ minishift addon apply istio <1>
 ----
+<1> The command will take few minutes, you can watch the status with command `oc -n istio-system get pods -w --as system:admin`, you can terminate watch with kbd:[CTRL + C]
 
 == Undeploy Istio
 
@@ -63,7 +66,7 @@ Removing the `istio` add-on will undeploy Istio from the Minishift-provisioned O
 
 Run the following command to remove the `istio` add-on:
 
-[code,sh]
+[source,bash]
 ----
 $ minishift addon remove istio
 ----
@@ -72,7 +75,7 @@ $ minishift addon remove istio
 
 Run the following command to delete and remove the `istio` add-on artifacts from the machine:
 
-[code,sh]
+[soource,bash]
 ----
 $ minishift addon uninstall istio
 ----

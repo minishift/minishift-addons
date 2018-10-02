@@ -9,6 +9,7 @@ sleep 30
 
 oc delete all -l minishift-addon=istio
 oc delete project istio-operator
+oc delete project istio-system
 
 oc project myproject
 
