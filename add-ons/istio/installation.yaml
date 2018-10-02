@@ -3,11 +3,16 @@ kind: "Installation"
 metadata:
   name: "istio-installation"
 spec:
+  istio:
+    authentication: true
+    community: false
+    version: 0.2.0
   jaeger:
+    version: 1.6.0
     elasticsearch_memory: 1Gi
   kiali:
-    username: adminuser
+    username: admin
     password: admin
     prefix: kiali/
     version: v0.7.1
-  
+    

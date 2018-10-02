@@ -2,29 +2,35 @@
 # Description: Deploys Latest Istio
 # Url: https://github.com/istio/istio
 # OpenShift-Version: >=3.10.0
+# Depends-On: anyuid, admin-user
 # From istio doc
 
 echo Prepare for install istio
 
 ssh sudo sysctl vm.max_map_count=262144
+ssh sudo sysctl -p 
+ssh echo 'vm.max_map_count = 262144' | sudo tee /etc/sysctl.d/99-elasticsearch.conf > /dev/null
 
-echo Install istio-operator
+echo Installing istio-operator
 
 !oc new-project istio-operator
-!oc new-app -f istio_community_operator_template.yaml -l 'minishift-addon=istio' --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=https://#{ip}:8443/
+!oc new-app -f istio_operator_template.yaml -l 'minishift-addon=istio' --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=https://#{ip}:8443/
 
 sleep 10
 
-echo Install istio
+echo Installing Istio
 
 oc apply -f installation.yaml
 
 oc project myproject
 
+# To Prepare the project for Istio Application deployment, run the following commands:
+echo 'minishift addons enable admin-user'
+echo 'minishift addons apply admin-user'
+echo 'minishift addons enable anyuid'
+echo 'minishift addons apply anyuid'
+echo 'oc adm policy add-scc-to-user anyuid -z default -n myproject'
+echo 'oc adm policy add-scc-to-user privileged -z default -n myproject'
+
 echo Please wait for few seconds before all pods are up!
 echo Watch the pods status via minishift console or oc get pods -w -n istio-system --as system:admin
-
-echo Please update the Security Context Constraints (SCC) for using istio side-car in your project.
-echo oc adm policy add-scc-to-user anyuid -z default -n myproject
-echo oc adm policy add-scc-to-user privileged -z default -n myproject
-echo oc label namespace myproject istio-injection=enabled
