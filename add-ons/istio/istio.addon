@@ -1,37 +1,36 @@
 # Name: istio
 # Description: Deploys Latest Istio
 # Url: https://github.com/istio/istio
-# Required-Vars: ISTIO_HOME
-# OpenShift-Version: >=3.7.0
-
+# OpenShift-Version: >=3.10.0
+# Depends-On: anyuid, admin-user
 # From istio doc
-oc adm policy add-scc-to-user anyuid -z istio-ingress-service-account -n istio-system
-oc adm policy add-scc-to-user anyuid -z istio-egress-service-account -n istio-system
-oc adm policy add-scc-to-user anyuid -z istio-pilot-service-account -n istio-system
-oc adm policy add-scc-to-user anyuid -z default -n istio-system
 
-# Create Istio 
-oc create -f #{ISTIO_HOME}/install/kubernetes/istio.yaml
+echo Prepare for install istio
 
-oc expose svc istio-ingress -n istio-system
+ssh sudo sysctl vm.max_map_count=262144
+ssh sudo sysctl -p 
+ssh echo 'vm.max_map_count = 262144' | sudo tee /etc/sysctl.d/99-elasticsearch.conf > /dev/null
 
-# Add Istio Addons 
-oc create -f #{ISTIO_HOME}/install/kubernetes/addons/prometheus.yaml
-oc create -f #{ISTIO_HOME}/install/kubernetes/addons/grafana.yaml
-oc create -f #{ISTIO_HOME}/install/kubernetes/addons/servicegraph.yaml
-oc expose svc grafana -n istio-system
-oc expose svc servicegraph -n istio-system
-oc expose svc prometheus -n istio-system
+echo Installing istio-operator
 
-# Install Jaeger
-oc apply -f templates/jaeger-all-in-one.yml -n openshift
-oc new-app jaeger-template-all-in-one -n istio-system
+!oc new-project istio-operator
+!oc new-app -f istio_community_operator_template.yaml -l 'minishift-addon=istio' --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=https://#{ip}:8443/
 
-# Add the any uid permission to the default myproject
-oc adm policy add-scc-to-user anyuid -z default -n myproject
-oc adm policy add-scc-to-user privileged -z default -n myproject
+sleep 10
+
+echo Installing Istio
+
+oc apply -f installation.yaml
 
 oc project myproject
 
-echo 'Please wait for few seconds before all pods are up!'
-echo 'Watch the pods status via minishift console or oc get pods -w --all-namespaces --as system:admin'
+# To Prepare the project for Istio Application deployment, run the following commands:
+echo 'minishift addons enable admin-user'
+echo 'minishift addons apply admin-user'
+echo 'minishift addons enable anyuid'
+echo 'minishift addons apply anyuid'
+echo 'oc adm policy add-scc-to-user anyuid -z default -n myproject'
+echo 'oc adm policy add-scc-to-user privileged -z default -n myproject'
+
+echo Please wait for few seconds before all pods are up!
+echo Watch the pods status via minishift console or oc get pods -w -n istio-system --as system:admin

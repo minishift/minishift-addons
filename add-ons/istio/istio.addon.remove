@@ -2,64 +2,15 @@
 # Description: UnDeploys Istio
 # Url: https://github.com/istio/istio
 
-oc login -u system:admin
-
-oc project istio-system
-
-oc delete --ignore-not-found=true clusterroles "istio-pilot-istio-system"
-oc delete --ignore-not-found=true clusterroles "istio-initializer-istio-system"
-oc delete --ignore-not-found=true clusterroles "istio-mixer-istio-system"
-oc delete --ignore-not-found=true clusterroles "istio-ca-istio-system"
-oc delete --ignore-not-found=true clusterroles "istio-sidecar-istio-system"
-
-oc delete --ignore-not-found=true clusterrolebindings "istio-pilot-admin-role-binding-istio-system"
-oc delete --ignore-not-found=true clusterrolebindings "istio-initializer-admin-role-binding-istio-system"
-oc delete --ignore-not-found=true clusterrolebindings "istio-ca-role-binding-istio-system"
-oc delete --ignore-not-found=true clusterrolebindings "istio-ingress-admin-role-binding-istio-system"
-oc delete --ignore-not-found=true clusterrolebindings "istio-egress-admin-role-binding-istio-system"
-oc delete --ignore-not-found=true clusterrolebindings "istio-sidecar-role-binding-istio-system"
-oc delete --ignore-not-found=true clusterrolebindings "istio-mixer-admin-role-binding-istio-system"
-
-oc delete --ignore-not-found=true customresourcedefinitions "rules.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "attributemanifests.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "deniers.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "listcheckers.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "memquotas.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "noops.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "prometheuses.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "stackdrivers.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "statsds.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "stdios.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "svcctrls.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "checknothings.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "listentries.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "logentries.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "metrics.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "quotas.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "reportnothings.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "destinationpolicies.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "egressrules.config.istio.io"
-oc delete --ignore-not-found=true customresourcedefinitions "routerules.config.istio.io"
-
-oc delete --ignore-not-found=true configmaps "istio-mixer"
-oc delete --ignore-not-found=true services "istio-mixer"
-oc delete --ignore-not-found=true serviceaccounts "istio-mixer-service-account"
-oc delete --ignore-not-found=true deployments "istio-mixer"
-oc delete --ignore-not-found=true configmaps "istio"
-oc delete --ignore-not-found=true services "istio-pilot"
-oc delete --ignore-not-found=true serviceaccounts "istio-pilot-service-account"
-oc delete --ignore-not-found=true deployments "istio-pilot"
-oc delete --ignore-not-found=true services "istio-ingress"
-oc delete --ignore-not-found=true serviceaccounts "istio-ingress-service-account"
-oc delete --ignore-not-found=true deployments "istio-ingress"
-oc delete --ignore-not-found=true services "istio-egress"
-oc delete --ignore-not-found=true serviceaccounts "istio-egress-service-account"
-oc delete --ignore-not-found=true deployments "istio-egress"
-oc delete --ignore-not-found=true serviceaccounts "istio-ca-service-account"
-oc delete --ignore-not-found=true deployments "istio-ca"
-
-oc delete --ignore-not-found=true project istio-system
+oc project istio-operator
+oc delete -n istio-operator installation istio-installation
 
 sleep 30
 
+oc delete all -l minishift-addon=istio
+oc delete project istio-operator
+oc delete project istio-system
+
 oc project myproject
+
+echo Istio add-on successfully removed
