@@ -24,7 +24,7 @@ $ minishift profile set servicemesh <1>
 $ minishift config set memory 8GB <2>
 $ minishift config set cpus 4 <3>
 $ minishift config set image-caching true <4>
-$ minishift config set openshift-version v3.1.0 <5>
+$ minishift config set openshift-version v3.10.0 <5>
 $ minishift addon enable dynamic-admission-controllers #optional <6>
 $ minishift addon enable istio
 $ minishift start servicemesh<7>
