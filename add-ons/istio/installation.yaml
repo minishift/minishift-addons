@@ -5,7 +5,7 @@ metadata:
 spec:
   istio:
     authentication: true
-    community: false
+    community: true
     version: 0.2.0
   jaeger:
     version: 1.6.0
