@@ -30,7 +30,7 @@ Feature: eap-cd add-on
 
   Scenario: Applying the add-on
      When executing "minishift addons apply eap-cd" succeeds
-     Then stdout should contain "EAP CD 14 imagestreams and templates installed"
+     Then stdout should contain "EAP CD 15 imagestreams and templates installed"
 
   Scenario: Deployment of eap-cd-basic application
     Given Minishift has state "Running"
@@ -43,7 +43,7 @@ Feature: eap-cd add-on
   Scenario: Application pod is using correct version of EAP-CD
     Given setting scenario variable "POD_NAME" to the stdout from executing "oc get pod --selector app=eap-cd-basic-s2i -o name"
      When executing "oc rsh $(POD_NAME) /opt/eap/bin/jboss-cli.sh -c version" succeeds
-     Then stdout should contain "Product: JBoss EAP CD 7.2.0.CD14"
+     Then stdout should contain "Product: JBoss EAP CD 7.3.0.CD15"
 
   Scenario: User deletes Minishift
     Given Minishift has state "Running"
