@@ -5,8 +5,8 @@
         "annotations": {
             "iconClass": "icon-eap",
             "tags": "eap,javaee,java,jboss,hidden",
-            "version": "14.0",
-            "openshift.io/display-name": "JBoss EAP CD 14 + AMQ 7 (tx recovery)",
+            "version": "15.0",
+            "openshift.io/display-name": "JBoss EAP CD 15 + AMQ 7 (tx recovery)",
             "openshift.io/provider-display-name": "Red Hat, Inc.",
             "description": "An example JBoss Enterprise Application Platform continuous delivery application with transaction recovery configured. For more information about using this template, see https://github.com/jboss-container-images/jboss-eap-7-openshift-image/blob/eap-cd/README.adoc",
             "template.openshift.io/long-description": "This template defines resources needed to develop a JBoss Enterprise Application Platform continuous delivery based application, including a build configuration, application deployment configuration and insecure communication using http. The template also demonstrates how to enable automated transaction recovery on scale down of application pods.  Automated transaction recovery is currently Technology Preview.",
@@ -17,7 +17,7 @@
     },
     "labels": {
         "template": "eap-cd-tx-recovery-s2i",
-        "xpaas": "14.0"
+        "xpaas": "15.0"
     },
     "message": "A new JBoss EAP CD based application has been created in your project.",
     "parameters": [
@@ -281,6 +281,7 @@
             "kind": "Service",
             "apiVersion": "v1",
             "spec": {
+                "publishNotReadyAddresses": true,
                 "clusterIP": "None",
                 "ports": [
                     {
@@ -422,7 +423,7 @@
                         "from": {
                             "kind": "ImageStreamTag",
                             "namespace": "${IMAGE_STREAM_NAMESPACE}",
-                            "name": "eap-cd-openshift:14"
+                            "name": "eap-cd-openshift:15"
                         }
                     }
                 },
@@ -660,7 +661,7 @@
                             "from": {
                                 "kind": "ImageStreamTag",
                                 "namespace": "${IMAGE_STREAM_NAMESPACE}",
-                                "name": "amq-broker-71-openshift:1.0"
+                                "name": "amq-broker-72-openshift:1.1"
                             }
                         }
                     },
@@ -685,7 +686,7 @@
                         "containers": [
                             {
                                 "name": "${APPLICATION_NAME}-amq",
-                                "image": "amq-broker-71-openshift",
+                                "image": "amq-broker-72-openshift",
                                 "imagePullPolicy": "Always",
                                 "readinessProbe": {
                                     "exec": {
