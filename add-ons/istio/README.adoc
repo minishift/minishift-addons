@@ -8,13 +8,14 @@ This add-on deploys the https://Istio.io/[Istio] **servicemesh** on to Minishift
 [NOTE]
 ====
 - The add-on was tested with Maistra (v0.9.0)
-- The add-on uses Istio Operator v0.9.0
+- The add-on uses Maistra Operator v0.9.0
 - This add-on depends on admin-user and anyuid  Minishift addons
+- This add-on deploys Istio with mutual TLS enabled.
 ====
 
 == Minishift profile setup
 
-As this Istio setup deploys applications like "3scale-istio-adapter", "istio-citadel", "istio-policy", "istio-sidecar-injector", "istio-telemetry", *istio-galley*,*istio-ingressgateway*, *istio-egressgateway*, *istio-pilot*,*elasticsearch*,*jaeger**,*kiali*, *grafana*, *prometheus* with their related resources
+As this Istio setup deploys applications like *istio-citadel*, *istio-policy*, *istio-sidecar-injector*, *istio-telemetry*, *istio-galley*,*istio-ingressgateway*, *istio-egressgateway*, *istio-pilot*,*elasticsearch*,*jaeger**,*kiali*, *grafana*, *prometheus* with their related resources
 such as https://kubernetes.io/docs/tasks/configure-pod-container/configmap/[configmaps], https://kubernetes.io/docs/concepts/configuration/secret/[secrets]
 and https://kubernetes.io/docs/concepts/api-extension/custom-resources/[Custom Resource Definitions], it is ideal to setup a Minishift profile with the following configuration:
 
@@ -32,7 +33,7 @@ $ minishift start <8>
 
 <1> Create a new Minishift profile named **servicemesh**
 <2> Use 8GB of memory for Istio and apps that you might deploy later
-<3> 4 CPUs results in a maximum of 30 pods, since Istio deploys approximately 9 pods at minimum
+<3> Istio deploys 17 processes plus 1 sidecar per pod in the mesh.
 <4> Caches the downloaded container images for future use
 <5> Pinning OpenShift version to v3.11.0, so that upgrade of minishift does not recreate the OpenShift cluster
 <6> Creates a new user called **admin** with **cluster-admin** role
