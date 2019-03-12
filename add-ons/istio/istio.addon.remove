@@ -7,6 +7,7 @@ oc delete -n istio-operator installation istio-installation
 
 sleep 30
 
+oc process -f istio_community_operator_template.yaml | oc delete -f -
 oc delete all -l minishift-addon=istio
 oc delete project istio-operator
 oc delete project istio-system

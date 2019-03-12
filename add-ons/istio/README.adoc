@@ -7,14 +7,14 @@ This add-on deploys the https://Istio.io/[Istio] **servicemesh** on to Minishift
 
 [NOTE]
 ====
-- The add-on was tested with Maistra (v0.2.0)
-- The add-on uses Istio Operator v0.2.0
+- The add-on was tested with Maistra (v0.9.0)
+- The add-on uses Istio Operator v0.9.0
 - This add-on depends on admin-user and anyuid  Minishift addons
 ====
 
 == Minishift profile setup
 
-As this Istio setup deploys applications like *istio-galley*,*istio-ingress*, *istio-egress*, *istio-pilot*,*elasticsearch*,*jaeger**,*kiali*, *grafana*, *prometheus* with their related resources
+As this Istio setup deploys applications like "3scale-istio-adapter", "istio-citadel", "istio-policy", "istio-sidecar-injector", "istio-telemetry", *istio-galley*,*istio-ingressgateway*, *istio-egressgateway*, *istio-pilot*,*elasticsearch*,*jaeger**,*kiali*, *grafana*, *prometheus* with their related resources
 such as https://kubernetes.io/docs/tasks/configure-pod-container/configmap/[configmaps], https://kubernetes.io/docs/concepts/configuration/secret/[secrets]
 and https://kubernetes.io/docs/concepts/api-extension/custom-resources/[Custom Resource Definitions], it is ideal to setup a Minishift profile with the following configuration:
 
@@ -24,7 +24,7 @@ $ minishift profile set servicemesh <1>
 $ minishift config set memory 8GB <2>
 $ minishift config set cpus 4 <3>
 $ minishift config set image-caching true <4>
-$ minishift config set openshift-version v3.10.0 <5>
+$ minishift config set openshift-version v3.11.0 <5>
 $ minishift addon enable admin-user <6>
 $ minishift addon enable anyuid <7>
 $ minishift start <8>
@@ -34,9 +34,9 @@ $ minishift start <8>
 <2> Use 8GB of memory for Istio and apps that you might deploy later
 <3> 4 CPUs results in a maximum of 30 pods, since Istio deploys approximately 9 pods at minimum
 <4> Caches the downloaded container images for future use
-<5> Pinning OpenShift version to v3.10.0, so that upgrade of minishift does not recreate the OpenShift cluster
+<5> Pinning OpenShift version to v3.11.0, so that upgrade of minishift does not recreate the OpenShift cluster
 <6> Creates a new user called **admin** with **cluster-admin** role
-<7> Allows containers within OpenShift to be run with any user id 
+<7> Allows containers within OpenShift to be run with any user id
 <8> Since we have set the profile to be **servicemesh**, this command starts Minishift with profile **servicemesh**
 
 == Install add-on
@@ -58,7 +58,7 @@ Run the following command to apply `istio` add-on:
 $ minishift addon enable istio <1>
 $ minishift addon apply istio <2>
 ----
-<1> Enabling the **istio** addon allows the addon to be automatically applied during profile recreation i.e. minishift delete && minishift start 
+<1> Enabling the **istio** addon allows the addon to be automatically applied during profile recreation i.e. minishift delete && minishift start
 <2> The command will take few minutes, you can watch the status with command `oc -n istio-system get pods -w --as system:admin`, you can terminate watch with kbd:[CTRL + C]
 
 == Undeploy Istio
