@@ -3,12 +3,15 @@
 # Url: https://github.com/istio/istio
 
 oc project istio-operator
-oc delete -n istio-operator installation istio-installation
+oc delete -n istio-system -f installation.yaml
 
 sleep 30
 
-oc process -f istio_community_operator_template.yaml | oc delete -f -
-oc delete all -l minishift-addon=istio
+oc delete -n istio-operator -f istio_v1alpha1_installation_crd.yaml
+oc delete -n istio-operator -f istio_v1alpha3_controlplane_crd.yaml
+oc delete -n istio-operator -f operator.yaml
+oc delete -n istio-operator -f rbac.yaml
+oc delete -n istio-operator -f service_account.yaml
 oc delete project istio-operator
 oc delete project istio-system
 
