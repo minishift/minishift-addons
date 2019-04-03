@@ -19,7 +19,7 @@ spec:
         autoscaleEnabled: false
       istio-ingressgateway:
         autoscaleEnabled: false
-
+        ior_enabled: false
     mixer:
       policy:
         autoscaleEnabled: false
@@ -38,7 +38,3 @@ spec:
       autoscaleEnabled: false
       traceSampling: 100.0
 
-    kiali:
-      dashboard:
-        user: admin
-        passphrase: admin

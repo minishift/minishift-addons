@@ -16,6 +16,13 @@ rules:
   - secrets
   - serviceaccounts
   - namespaces
+  - routes
+  verbs:
+  - '*'
+- apiGroups:
+  - oauth.openshift.io
+  resources:
+  - oauthclients
   verbs:
   - '*'
 - apiGroups:
@@ -139,6 +146,7 @@ rules:
   - route.openshift.io
   resources:
   - routes
+  - routes/custom-host
   verbs:
   - '*'
 - apiGroups:
@@ -230,7 +238,7 @@ rules:
   - get
   - list
   - watch
-- nonResourceURLs: 
+- nonResourceURLs:
   - "/metrics"
   verbs:
   - get
