@@ -1,0 +1,23 @@
+###################################################################################################
+# Name: keycloak
+# Description: Installs Keycloak in a Keycloak project
+# Required-Vars: OPENSHIFT_USERNAME, OPENSHIFT_PASSWORD, KEYCLOAK_PROJECT, KEYCLOAK_USER, KEYCLOAK_PASSWORD,DB_VENDOR
+# OpenShift-Version: >=3.9.0
+# Var-Defaults: OPENSHIFT_USERNAME=developer,OPENSHIFT_PASSWORD=developer,KEYCLOAK_PROJECT=keycloak,KEYCLOAK_USER=admin,KEYCLOAK_PASSWORD=admin,DB_VENDOR=h2
+# Url: Template from https://raw.githubusercontent.com/jboss-dockerfiles/keycloak/master/openshift-examples/keycloak-https.json
+###################################################################################################
+
+# login
+oc login -u system:admin
+
+# add template
+oc create -n openshift -f https://raw.githubusercontent.com/jboss-dockerfiles/keycloak/master/openshift-examples/keycloak-https.json
+
+# login
+oc login -u #{OPENSHIFT_USERNAME} -p #{OPENSHIFT_PASSWORD}
+
+# create project
+oc new-project #{KEYCLOAK_PROJECT}
+
+# instantiate keycloak
+oc new-app keycloak-https -p APPLICATION_NAME=#{KEYCLOAK_PROJECT} -p NAMESPACE=#{KEYCLOAK_PROJECT} -p KEYCLOAK_USER=#{KEYCLOAK_USER} -p KEYCLOAK_PASSWORD=#{KEYCLOAK_PASSWORD}

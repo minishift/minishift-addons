@@ -1,0 +1,14 @@
+###################################################################################################
+# Name: keycloak
+# Description: Installs Keycloak in a Keycloak project
+# Required-Vars: OPENSHIFT_USERNAME, OPENSHIFT_PASSWORD, KEYCLOAK_PROJECT, KEYCLOAK_USER, KEYCLOAK_PASSWORD,
+# OpenShift-Version: >=3.9.0
+# Var-Defaults: OPENSHIFT_USERNAME=developer,OPENSHIFT_PASSWORD=developer,KEYCLOAK_PROJECT=keycloak,DB_VENDOR=h2,KEYCLOAK_USER=admin,KEYCLOAK_PASSWORD=admin
+# Url: Template from https://raw.githubusercontent.com/robert-greathouse/keycloak/master/openshift-examples/keycloak-https.json
+###################################################################################################
+
+oc login -u system:admin
+
+oc delete template keycloak-https -n openshift
+
+oc delete project keycloak
