@@ -15,7 +15,7 @@ echo Installing istio-operator
 
 oc new-project istio-operator
 oc new-project istio-system
-oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.11/deploy/maistra-operator.yaml
+oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.10/deploy/maistra-operator.yaml
 
 
 sleep 10
