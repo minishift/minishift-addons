@@ -15,11 +15,8 @@ echo Installing istio-operator
 
 oc new-project istio-operator
 oc new-project istio-system
-oc apply -n istio-operator -f istio_v1alpha1_installation_crd.yaml
-oc apply -n istio-operator -f istio_v1alpha3_controlplane_crd.yaml
-oc apply -n istio-operator -f operator.yaml
-oc apply -n istio-operator -f rbac.yaml
-oc apply -n istio-operator -f service_account.yaml
+oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.11/deploy/maistra-operator.yaml
+
 
 sleep 10
 

@@ -37,4 +37,9 @@ spec:
     pilot:
       autoscaleEnabled: false
       traceSampling: 100.0
+    
+    kiali:
+     dashboard:
+        user: admin
+        passphrase: admin
 
