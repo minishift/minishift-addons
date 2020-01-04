@@ -1,0 +1,16 @@
+# Name: grafana-prometheus
+# Description: This template adds grafana for displaying Openshift Metrics in its own namespace. If requires metrics and management-infra addon, to connect to hawkular-metrics on openshift.
+# Url: https://github.com/mrsiano/grafana-ocp
+# OpenShift-Version: >=3.7.0
+# Required-Vars: grafana_namespace
+
+# TODO: Once conditional commands are there, create the namespace if it does not exist
+oc adm new-project #{grafana_namespace}
+oc new-app -f grafana-ocp.yaml -n #{grafana_namespace}
+
+echo You have installed #{addon-name}
+echo To finish install run:
+echo   ~/.minishift/addons/grafana-prometheus/setup-grafana.sh #{grafana_namespace}
+echo
+echo To delete:
+echo     oc delete project -n #{grafana_namespace} --as=system:admin
