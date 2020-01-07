@@ -1,0 +1,10 @@
+# Name: rocketchat
+# Description: This template creates a RocketChat namespace, app for the local cluster openshift
+# Url: https://rocket.chat/
+
+oc new-project rocketchat --description="RocketChat rooms for Dev Teams' privacy"
+
+oc create -f rocket-chat-ephemeral.json
+oc create -f rocket-chat-persistent.json
+
+oc new-app rocket-chat -p MONGODB_DATABASE=rocketchat -p MONGODB_USER=rocketchat-admin -p MONGODB_PASSWORD=rocketchat
