@@ -1,0 +1,8 @@
+# Name: nodejs
+# Description: ImageStreams for developing and deploying application using node.js
+# Url: https://github.com/bucharest-gold/centos7-s2i-nodejs
+# Maintainer: Jorge Morales <jmorales@redhat.com>
+
+oc apply -f https://raw.githubusercontent.com/openshift/library/master/community/nodejs/imagestreams/nodejs-centos7.json -n openshift 
+
+echo Imagestreams have been installed in the openshift project and are available to use
