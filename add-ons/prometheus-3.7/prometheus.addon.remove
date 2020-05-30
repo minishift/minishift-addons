@@ -1,0 +1,8 @@
+# Name: prometheus-3.7
+# Description: Remove add on
+# Url: https://raw.githubusercontent.com/openshift/origin/master/examples/prometheus/prometheus.yaml
+
+echo [prometheus] removing all resources
+oc delete sa,clusterrolebinding,route,svc,secret,deployment,configmap,daemonset,statefulset -l 'app in (prometheus,prometheus-node-exporter)' -n #{prometheus_namespace} --as=system:admin
+
+echo prometheus addon removed

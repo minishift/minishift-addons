@@ -1,0 +1,30 @@
+# Name: prometheus-3.7
+# Description: This template creates a Prometheus instance preconfigured to gather OpenShift and Kubernetes platform and node metrics and report them to admins. It is protected by an OAuth proxy that only allows access for users who have view access to the prometheus namespace. You may customize where the images (built from openshift/prometheus and openshift/oauth-proxy) are pulled from via template parameters.
+# Url: https://raw.githubusercontent.com/openshift/origin/master/examples/prometheus/prometheus.yaml
+# OpenShift-Version: >=3.7.0
+# Required-Vars: prometheus_namespace
+
+oc new-app -f prometheus.yaml -p NAMESPACE=#{prometheus_namespace} -n #{prometheus_namespace}
+oc create -f node-exporter.yaml -n #{prometheus_namespace}
+oc adm policy add-scc-to-user -z prometheus-node-exporter -n #{prometheus_namespace} hostaccess
+
+# Add labels to things for easy removal
+oc label svc/prometheus app=prometheus -n #{prometheus_namespace}
+oc label svc/alerts app=prometheus -n #{prometheus_namespace}
+oc label configmap/prometheus app=prometheus -n #{prometheus_namespace}
+oc label secret/alerts-proxy app=prometheus -n #{prometheus_namespace}
+oc label secret/prometheus-proxy app=prometheus -n #{prometheus_namespace}
+oc label secret/prometheus-tls app=prometheus -n #{prometheus_namespace}
+oc label sa/prometheus app=prometheus -n #{prometheus_namespace}
+oc label sa/prometheus-node-exporter app=prometheus -n #{prometheus_namespace}
+oc label routes/prometheus app=prometheus -n #{prometheus_namespace}
+oc label routes/alerts app=prometheus -n #{prometheus_namespace}
+oc label clusterrolebinding/prometheus-cluster-reader app=prometheus -n #{prometheus_namespace}
+oc label configmaps/prometheus-alerts app=prometheus -n #{prometheus_namespace}
+
+echo You have installed #{addon-name}
+echo To access #{addon-name} go to https://prometheus-#{prometheus_namespace}.#{routing-suffix}
+echo
+echo To delete:
+echo   minishift addon remove prometheus-3.7
+echo   oc delete sa,clusterrolebinding,route,svc,secret,deployment,configmap,daemonset,statefulset -l 'app in (prometheus,prometheus-node-exporter)' -n #{prometheus_namespace} --as=system:admin
